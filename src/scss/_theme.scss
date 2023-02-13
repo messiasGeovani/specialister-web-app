@@ -1,0 +1,8 @@
+$theme-colors: (
+  "primary": $blue-primary-color,
+);
+$font-family-base: "Aiglon";
+$font-family-sans-serif: "Aiglon";
+
+@import "bootstrap/scss/_buttons.scss";
+@import "bootstrap/scss/bootstrap";

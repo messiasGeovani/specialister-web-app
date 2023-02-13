@@ -1,0 +1,56 @@
+@import "src/scss/fonts";
+@import "src/scss/bootstrap";
+@import "scr/scss/colors";
+@import "src/scss/theme";
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.bg-primary-theme {
+  background-color: #f8f9fa;
+}
+
+%base-btn {
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.open > .dropdown-toggle.btn-primary {
+  @extend %base-btn;
+  background-color: $blue-primary-color;
+  border-color: $blue-primary-color;
+}
+
+.btn-primary-2 {
+  @extend %base-btn;
+  background-color: $blue-secondary-color;
+  border-color: $blue-secondary-color;
+}
+
+.text-primary-2 {
+  color: $blue-primary-color;
+}
+
+.border-primary {
+  border-color: $blue-primary-color;
+}
+
+.text-primary-3 {
+  color: $blue-secondary-color;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.primary-1 {
+  color: $blue-primary-color;
+}
