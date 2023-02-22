@@ -1,0 +1,13 @@
+.h-100 {
+  height: 100%;
+}
+
+.h-auto {
+  height: auto;
+}
+
+@include media-breakpoint-up(md) {
+  .h-md-auto {
+    height: auto;
+  }
+}

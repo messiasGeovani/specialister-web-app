@@ -8,6 +8,7 @@
     "models": ["LocationModel"]
   },
   "authentication": {
+    "components": ["FormAuthentication"],
     "services": ["AuthenticationService"],
     "models": ["AuthenticationModel"],
     "guards": ["AuthenticationGuard"]

@@ -1,0 +1,13 @@
+@import "src/scss/bootstrap";
+
+.box {
+  @extend .d-flex, .d-md-block, .flex-column, .justify-content-center;
+
+  @include media-breakpoint-up(md) {
+    -webkit-box-shadow: 5px 6px 16px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 5px 6px 16px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 5px 6px 16px 0px rgba(0, 0, 0, 0.75);
+
+    border-radius: 7px;
+  }
+}
