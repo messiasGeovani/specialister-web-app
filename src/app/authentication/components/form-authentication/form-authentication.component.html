@@ -1,85 +1,159 @@
-<div class="box w-100 h-100 h-md-auto px-3 px-md-5 py-5">
-  <h4 class="aiglon d-none d-md-block">Authentication</h4>
-  <h1 class="aiglon d-md-none">Login</h1>
-
-  <form [formGroup]="authForm" class="w-100">
-    <div class="mt-4">
-      <label for="form_auth_email">Email</label>
-      <input
-        id="form_auth_email"
-        type="email"
-        class="form-control"
-        formControlName="email"
-      />
-    </div>
-    <div class="mt-4">
-      <label for="form_auth_password">Password</label>
-      <input
-        id="form_auth_password"
-        type="password"
-        class="form-control"
-        formControlName="password"
-      />
-    </div>
-    <div class="mt-4">
-      <label for="form_auth_confirm_password">Confirm Password</label>
-      <input
-        id="form_auth_confirm_password"
-        type="password"
-        class="form-control"
-        formControlName="confirmPassword"
-      />
-    </div>
-    <div class="form-check mt-3">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value=""
-        id="flexCheckDefault"
-      />
-      <label class="form-check-label" for="flexCheckDefault">
-        Remember-me
-      </label>
+<div
+  class="d-flex align-items-center justify-content-center w-100 h-100 h-md-auto px-3 px-md-5 py-5 animate__animated animate__fadeInLeft"
+>
+  <form
+    [formGroup]="authForm"
+    class="w-75 h-100 d-flex flex-column justify-content-center"
+    (submit)="validateForm($event)"
+    #form
+  >
+    <div
+      [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+      class="animate__animated animate__fadeInLeft animate__fast mb-3"
+    >
+      <h4 class="aiglon-bold d-none d-md-block">Login</h4>
+      <h1 class="aiglon-bold d-md-none">Login</h1>
     </div>
 
-    <button class="btn btn-primary w-100 mt-5">Autenticate!</button>
+    <div
+      [style.display]="isSignUpPage() ? 'visible' : 'none'"
+      class="animate__animated animate__fadeInLeft animate__fast mb-3"
+    >
+      <h4 class="aiglon-bold d-none d-md-block">Sign Up</h4>
+      <h1 class="aiglon-bold d-md-none">Sign Up</h1>
+    </div>
 
-    <hr />
-
-    <div>
-      <button
-        type="button"
-        class="btn btn-outline-danger"
-        (mouseenter)="iconColors.google = 'white'"
-        (mouseleave)="iconColors.google = 'red'"
+    <div class="animate__animated animate__fadeInLeft animate__normal">
+      <div class="mt-4">
+        <label for="form_auth_email">Email</label>
+        <input
+          id="form_auth_email"
+          type="email"
+          class="form-control"
+          email
+          [ngClass]="{
+            'is-invalid': authForm.get('email')?.hasError('email'),
+            'is-valid': isSignUpPage() && !authForm.get('email')?.errors
+          }"
+          formControlName="email"
+        />
+      </div>
+      <div class="mt-4">
+        <label for="form_auth_password">Password</label>
+        <input
+          id="form_auth_password"
+          type="password"
+          maxlength="25"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              isSignUpPage() &&
+              (authForm.get('password')?.hasError('matching') ||
+                authForm.get('password')?.hasError('minlength') ||
+                authForm.get('confirmPassword')?.hasError('matching')),
+            'is-valid': isSignUpPage() && !authForm.get('password')?.errors
+          }"
+          formControlName="password"
+        />
+      </div>
+      <div [style.display]="isSignUpPage() ? 'visible' : 'none'" class="mt-4">
+        <label for="form_auth_confirm_password">Confirm Password</label>
+        <input
+          id="form_auth_confirm_password"
+          type="password"
+          maxlength="25"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              authForm.get('confirmPassword')?.hasError('matching') ||
+              authForm.get('confirmPassword')?.hasError('minlength') ||
+              authForm.get('password')?.hasError('matching'),
+            'is-valid': !authForm.get('confirmPassword')?.errors
+          }"
+          formControlName="confirmPassword"
+        />
+      </div>
+      <div
+        [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+        class="form-check mt-3"
       >
-        <app-google-icon
-          [size]="20"
-          [color]="iconColors.google"
-        ></app-google-icon>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault"
+        />
+        <label class="form-check-label" for="flexCheckDefault">
+          Remember-me
+        </label>
+      </div>
+    </div>
+
+    <div class="animate__animated animate__fadeInLeft animate__medium">
+      <button type="submit" class="btn btn-primary w-100 mt-4 mb-1">
+        <strong>{{ isSignUpPage() ? "Sign Up" : "Login" }}</strong>
       </button>
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        (mouseenter)="iconColors.facebook = 'white'"
-        (mouseleave)="iconColors.facebook = '#4267B2'"
+      <div class="d-flex justify-content-end mt-1">
+        <a
+          [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+          class="text-secondary"
+        >
+          Forgot Password?
+        </a>
+      </div>
+    </div>
+
+    <div class="animate__animated animate__fadeInLeft animate__light-slow">
+      <hr />
+
+      <div class="d-flex justify-content-center align-items-center mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (mouseenter)="iconColors.google = 'white'"
+          (mouseleave)="iconColors.google = googleColor"
+        >
+          <app-google-icon
+            [size]="20"
+            [color]="iconColors.google"
+          ></app-google-icon>
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary mx-3"
+          (mouseenter)="iconColors.linkedin = 'white'"
+          (mouseleave)="iconColors.linkedin = linkedinColor"
+        >
+          <app-linkedin-icon
+            [size]="20"
+            [color]="iconColors.linkedin"
+          ></app-linkedin-icon>
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (mouseenter)="iconColors.facebook = 'white'"
+          (mouseleave)="iconColors.facebook = facebookColor"
+        >
+          <app-facebook-icon
+            [size]="20"
+            [color]="iconColors.facebook"
+          ></app-facebook-icon>
+        </button>
+      </div>
+
+      <p
+        [style.display]="isSignUpPage() ? 'visible' : 'none'"
+        class="mt-4 text-center"
       >
-        <app-linkedin-icon
-          [size]="20"
-          [color]="iconColors.facebook"
-        ></app-linkedin-icon>
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        (mouseenter)="iconColors.linkedin = 'white'"
-        (mouseleave)="iconColors.linkedin = '#0e76a8'"
+        Already an user? <a routerLink="/auth">LOGIN</a>
+      </p>
+      <p
+        [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+        class="mt-4 text-center"
       >
-        <app-google-icon
-          [size]="20"
-          [color]="iconColors.linkedin"
-        ></app-google-icon>
-      </button>
+        Need an account? <a routerLink="/auth/sign-up">SIGN UP</a>
+      </p>
     </div>
   </form>
 </div>

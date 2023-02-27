@@ -1,11 +1,12 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { LocalStorageService } from './services/local-storage.service';
-import { LocationService } from './services/location.service';
-import { SessionService } from './services/session.service';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { ErrorInterceptor } from './interceptors';
+import { JwtInterceptor } from './interceptors';
+import { LocalStorageService } from './services/local-storage/local-storage.service';
+import { LocationService } from './services';
+import { ResponsiveService } from './services';
+import { SessionService } from './services';
 
 @NgModule({
   declarations: [],
@@ -16,6 +17,7 @@ import { SessionService } from './services/session.service';
     LocalStorageService,
     LocationService,
     SessionService,
+    ResponsiveService,
   ],
 })
 export class CoreModule {

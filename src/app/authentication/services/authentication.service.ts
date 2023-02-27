@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
-import { SessionService } from 'src/app/core/services/session.service';
+import { SessionService } from 'src/app/core/services';
 import { PageName } from 'src/app/shared/enums/page-name.enum';
 import { PageMaps } from 'src/app/shared/maps/page.map';
 import { environment } from 'src/environments/environment';

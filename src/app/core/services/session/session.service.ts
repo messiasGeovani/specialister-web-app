@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/authentication/models/user';
-import { LocalStorageService } from './local-storage.service';
+import { LocalStorageService } from '../';
 
 @Injectable({
   providedIn: 'root',
