@@ -1,3 +1,3 @@
-export * from './google-icon/google-icon.component';
-export * from './linkedin-icon/linkedin-icon.component';
-export * from './facebook-icon/facebook-icon.component';
+export * from './google/google-icon.component';
+export * from './linkedin/linkedin-icon.component';
+export * from './facebook/facebook-icon.component';
