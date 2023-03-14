@@ -7,6 +7,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Authentication } from '../../models/authentication';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-form-authentication',
@@ -39,7 +41,7 @@ export class FormAuthenticationComponent implements OnInit {
     linkedin: '',
   };
 
-  constructor() {
+  constructor(private authenticationService: AuthenticationService) {
     this.iconColors.google = this.googleColor;
     this.iconColors.facebook = this.facebookColor;
     this.iconColors.linkedin = this.linkedinColor;
@@ -104,7 +106,14 @@ export class FormAuthenticationComponent implements OnInit {
 
   signUp() {}
 
-  signIn() {}
+  signIn() {
+    const auth = {
+      userName: this.authForm.value['email'],
+      password: this.authForm.value['password'],
+    };
+
+    this.authenticationService.Autenticate(auth as Authentication).subscribe();
+  }
 
   get googleColor(): string {
     return 'red';

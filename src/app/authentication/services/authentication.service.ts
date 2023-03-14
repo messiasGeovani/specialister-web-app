@@ -21,7 +21,8 @@ export class AuthenticationService {
   ) {}
 
   Autenticate(auth: Authentication) {
-    const request = this.http.post(environment.usersApiUrl, auth);
+    const requestPath = environment.authApiUrl + '/auth';
+    const request = this.http.post(requestPath, auth);
 
     return request.pipe(
       map((response: any) => response.data),

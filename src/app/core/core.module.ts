@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { ErrorInterceptor } from './interceptors';
 import { JwtInterceptor } from './interceptors';
@@ -10,7 +10,7 @@ import { SessionService } from './services';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

@@ -1,1 +1,1 @@
-window["usersAPI"] = "http://localhost:8080";
+window["userAPI"] = "http://localhost:5000/api";

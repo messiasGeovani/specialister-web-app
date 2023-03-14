@@ -7,7 +7,7 @@ import { AbstractResponse } from '../../models/abstract/abstract-reponse';
 @Injectable({
   providedIn: 'root',
 })
-export abstract class BaseHttpService {
+export abstract class HttpService {
   constructor(private readonly httpClient: HttpClient) {}
 
   get<T extends AbstractResponse<unknown>>(
