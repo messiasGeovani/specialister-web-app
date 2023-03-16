@@ -14,7 +14,8 @@
   font-style: bold;
 }
 
-$font-family: "Aiglon", sans-serif;
+$font-family: "Aiglon",
+sans-serif;
 
 .aiglon {
   font-family: $font-family;
@@ -40,6 +41,10 @@ $font-family: "Aiglon", sans-serif;
   font-size: 15px;
 }
 
+.fs-18 {
+  font-size: 18px;
+}
+
 .fs-20 {
   font-size: 20px;
 }
@@ -54,6 +59,10 @@ $font-family: "Aiglon", sans-serif;
 
 .fs-15-important {
   font-size: 15px !important;
+}
+
+.fs-18-important {
+  font-size: 18px !important;
 }
 
 .fs-20-important {

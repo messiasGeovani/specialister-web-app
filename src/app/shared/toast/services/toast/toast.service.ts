@@ -9,11 +9,17 @@ export class ToastService {
   }
 
   showSuccess(message: string | TemplateRef<any>) {
-    this.show(message, { classname: 'bg-success text-light', delay: 10000 });
+    this.show(message, {
+      classname: 'bg-success text-light fs-6',
+      delay: 10000,
+    });
   }
 
   showError(dangerTpl: string | TemplateRef<any>) {
-    this.show(dangerTpl, { classname: 'bg-danger text-light', delay: 15000 });
+    this.show(dangerTpl, {
+      classname: 'bg-danger text-light fs-18-important .aiglon-bold',
+      delay: 15000,
+    });
   }
 
   remove(toast: any) {
