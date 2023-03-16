@@ -1,39 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { Authentication } from '../../models/authentication';
-import { AuthenticationService } from '../../services/authentication.service';
+import { AbstractFormAuthenticationComponent } from './abstract-form-authentication.component';
 
 @Component({
   selector: 'app-form-authentication',
   templateUrl: './form-authentication.component.html',
   styleUrls: ['./form-authentication.component.scss'],
 })
-export class FormAuthenticationComponent implements OnInit {
+export class FormAuthenticationComponent
+  extends AbstractFormAuthenticationComponent
+  implements OnInit
+{
   @Input() page: string;
   @Output() submit = new EventEmitter();
-
-  authForm = new FormGroup({
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(25),
-      this.matchValidator('confirmPassword', true),
-    ]),
-    confirmPassword: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(25),
-      this.matchValidator('password'),
-    ]),
-  });
 
   iconColors = {
     google: '',
@@ -41,78 +19,46 @@ export class FormAuthenticationComponent implements OnInit {
     linkedin: '',
   };
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor() {
+    super();
     this.iconColors.google = this.googleColor;
     this.iconColors.facebook = this.facebookColor;
     this.iconColors.linkedin = this.linkedinColor;
   }
 
   ngOnInit(): void {
-    this.submit.emit(this.authForm.value);
+    this.submit.emit(this.form?.value);
   }
 
   isSignUpPage(): boolean {
     return this.page === 'sign-up';
   }
 
-  matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!this.isSignUpPage()) {
-        return null;
-      }
+  get usernameValidationMessage(): string {
+    const { username } = this;
 
-      if (control.parent && reverse) {
-        const c = (control.parent?.controls as any)[matchTo];
-
-        if (c) {
-          c.updateValueAndValidity();
-        }
-
-        return null;
-      }
-
-      return !!control.parent &&
-        !!control.parent.value &&
-        control.value === (control.parent?.controls as any)[matchTo].value
-        ? null
-        : { matching: true };
-    };
-  }
-
-  validateForm(event: SubmitEvent) {
-    const email = this.authForm.get('email');
-    const password = this.authForm.get('password');
-    const confirmPassword = this.authForm.get('confirmPassword');
-
-    const isSignUpPage = this.isSignUpPage();
-
-    event.preventDefault();
-
-    if (
-      isSignUpPage &&
-      email?.errors &&
-      password?.errors &&
-      confirmPassword?.errors
-    ) {
-      return;
+    if (username.hasError('required')) {
+      return 'Username cannot be empty!';
     }
 
-    if (!isSignUpPage && email?.errors && password?.errors) {
-      return;
-    }
-
-    return isSignUpPage ? this.signUp() : this.signIn();
+    return 'Username must have ate least 2 characters!';
   }
 
-  signUp() {}
+  get passwordValidationMessage(): string {
+    const { password, confirmPassword } = this;
 
-  signIn() {
-    const auth = {
-      userName: this.authForm.value['email'],
-      password: this.authForm.value['password'],
-    };
+    if (password.hasError('required')) {
+      return 'Password cannot be empty!';
+    }
 
-    this.authenticationService.Autenticate(auth as Authentication).subscribe();
+    const matchingError =
+      password.hasError('matching') || confirmPassword.hasError('matching');
+
+    if (this.isSignUpPage() && confirmPassword.touched && matchingError) {
+      return "Passwords doesn't match!";
+    }
+
+    return 'Password must have at least 8 characters!';
   }
 
   get googleColor(): string {

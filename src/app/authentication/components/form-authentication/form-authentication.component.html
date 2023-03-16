@@ -2,10 +2,9 @@
   class="d-flex align-items-center justify-content-center w-100 h-100 h-md-auto px-3 px-md-5 py-5 animate__animated animate__fadeInLeft"
 >
   <form
-    [formGroup]="authForm"
+    [formGroup]="form"
     class="w-75 h-100 d-flex flex-column justify-content-center"
     (submit)="validateForm($event)"
-    #form
   >
     <div
       [style.display]="!isSignUpPage() ? 'visible' : 'none'"
@@ -25,20 +24,27 @@
 
     <div class="animate__animated animate__fadeInLeft animate__normal">
       <div class="mt-4">
-        <label for="form_auth_email">Email</label>
+        <label for="form_auth_username">Username</label>
         <input
-          id="form_auth_email"
-          type="email"
+          id="form_auth_username"
+          type="text"
           class="form-control"
-          email
           [ngClass]="{
-            'is-invalid': authForm.get('email')?.hasError('email'),
-            'is-valid': isSignUpPage() && !authForm.get('email')?.errors
+            'is-invalid': (isSubmitted || username.touched) && username.invalid,
+            'is-valid':
+              isSignUpPage() &&
+              (isSubmitted || username.touched) &&
+              !username.invalid
           }"
-          formControlName="email"
+          formControlName="username"
         />
+        <app-form-field-error
+          [isFormSubmited]="isSubmitted"
+          [control]="username"
+          [message]="usernameValidationMessage"
+        ></app-form-field-error>
       </div>
-      <div class="mt-4">
+      <div class="mt-2">
         <label for="form_auth_password">Password</label>
         <input
           id="form_auth_password"
@@ -47,16 +53,26 @@
           class="form-control"
           [ngClass]="{
             'is-invalid':
+              ((isSubmitted || password.touched) && password.invalid) ||
+              (isSignUpPage() &&
+                (isSubmitted || confirmPassword.touched) &&
+                confirmPassword.invalid),
+            'is-valid':
               isSignUpPage() &&
-              (authForm.get('password')?.hasError('matching') ||
-                authForm.get('password')?.hasError('minlength') ||
-                authForm.get('confirmPassword')?.hasError('matching')),
-            'is-valid': isSignUpPage() && !authForm.get('password')?.errors
+              (isSubmitted || password.touched) &&
+              !password.invalid &&
+              (isSubmitted || confirmPassword.touched) &&
+              !confirmPassword.invalid
           }"
           formControlName="password"
         />
+        <app-form-field-error
+          [isFormSubmited]="isSubmitted"
+          [controls]="[password, confirmPassword]"
+          [message]="passwordValidationMessage"
+        ></app-form-field-error>
       </div>
-      <div [style.display]="isSignUpPage() ? 'visible' : 'none'" class="mt-4">
+      <div [style.display]="isSignUpPage() ? 'visible' : 'none'" class="mt-2">
         <label for="form_auth_confirm_password">Confirm Password</label>
         <input
           id="form_auth_confirm_password"
@@ -65,13 +81,21 @@
           class="form-control"
           [ngClass]="{
             'is-invalid':
-              authForm.get('confirmPassword')?.hasError('matching') ||
-              authForm.get('confirmPassword')?.hasError('minlength') ||
-              authForm.get('password')?.hasError('matching'),
-            'is-valid': !authForm.get('confirmPassword')?.errors
+              isSubmitted ||
+              (confirmPassword.touched && confirmPassword.invalid) ||
+              confirmPassword.invalid,
+            'is-valid':
+              (isSubmitted || confirmPassword.touched) &&
+              confirmPassword.value.length &&
+              !confirmPassword.invalid
           }"
           formControlName="confirmPassword"
         />
+        <app-form-field-error
+          [isFormSubmited]="isSubmitted"
+          [controls]="[confirmPassword, password]"
+          message="Passwords doesn't match!"
+        ></app-form-field-error>
       </div>
       <div
         [style.display]="!isSignUpPage() ? 'visible' : 'none'"

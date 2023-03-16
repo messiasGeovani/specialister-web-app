@@ -1,4 +1,4 @@
 export class Authentication {
-  userName: string;
+  username: string;
   password: string;
 }
