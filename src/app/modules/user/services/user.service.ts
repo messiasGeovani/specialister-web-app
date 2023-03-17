@@ -12,7 +12,7 @@ export class UserService extends HttpService {
   }
 
   checkIfUsernameExists(username: string) {
-    return this.get<void>(`usernames/${username}`);
+    return this.get<void>(`/usernames/${username}`);
   }
 
   getApiUrl(): string {
