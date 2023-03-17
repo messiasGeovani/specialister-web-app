@@ -81,9 +81,8 @@
           class="form-control"
           [ngClass]="{
             'is-invalid':
-              isSubmitted ||
-              (confirmPassword.touched && confirmPassword.invalid) ||
-              confirmPassword.invalid,
+              (isSubmitted || confirmPassword.touched) &&
+              (confirmPassword.invalid || confirmPassword.invalid),
             'is-valid':
               (isSubmitted || confirmPassword.touched) &&
               confirmPassword.value.length &&

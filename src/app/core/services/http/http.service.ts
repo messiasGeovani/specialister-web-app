@@ -2,28 +2,33 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { CamelCaseUtils } from 'src/app/shared/helpers/camel-case-utils';
-import { AbstractResponse } from '../../models/abstract/abstract-reponse';
+import { GlobalInjector } from '../../injectors/global.injector';
+import { HttpResponse } from '../../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export abstract class HttpService {
-  constructor(private readonly httpClient: HttpClient) {}
+  private readonly httpClient: HttpClient;
 
-  get<T extends AbstractResponse<unknown>>(
-    params?: string,
-    headers?: HttpHeaders | { [header: string]: string | string[] }
-  ): Observable<T> {
-    return this.httpClient
-      .get<T>(`${this.getApiUrl()}${params ? params : ''}`, { headers })
-      .pipe(map((response: T) => CamelCaseUtils.camelizeKeys(response)));
+  constructor() {
+    this.httpClient = GlobalInjector.injector.get(HttpClient);
   }
 
-  post<T extends unknown>(
+  get<R>(
+    params?: string,
+    headers?: HttpHeaders | { [header: string]: string | string[] }
+  ): Observable<HttpResponse<R>> {
+    return this.httpClient
+      .get<R>(`${this.getApiUrl()}${params ? params : ''}`, { headers })
+      .pipe(map((response: R) => CamelCaseUtils.camelizeKeys(response)));
+  }
+
+  post<T, R>(
     body?: T,
     route?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
-  ): Observable<T> {
+  ): Observable<HttpResponse<R>> {
     let url = this.getApiUrl();
 
     if (route) {

@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
-import { HttpStatus } from '../../models/http-status';
+import { HttpStatus } from '../../models';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         const httpStatus = new HttpStatus(
           err.status,
           err.statusText,
-          err.error.message
+          err.errors
         );
 
         if (httpStatus.status === 401) {
@@ -31,7 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         return throwError(
-          () => new Error(httpStatus.message, httpStatus as ErrorOptions)
+          () => new Error(httpStatus.statusText, httpStatus as ErrorOptions)
         );
       })
     );

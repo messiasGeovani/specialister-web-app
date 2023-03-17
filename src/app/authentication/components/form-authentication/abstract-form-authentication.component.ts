@@ -1,22 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
-  ValidationErrors,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { GlobalInjector } from 'src/app/core/injectors/global.injector';
+import { UserService } from 'src/app/modules/user/services/user.service';
+import { UserValidator } from 'src/app/modules/user/validators/user.validator';
 import { ToastService } from 'src/app/shared/toast/services';
-import { Authentication } from '../../models/authentication';
+import { Auth } from '../../models/auth';
 import { AuthenticationService } from '../../services/authentication.service';
+import { AuthenticationValidator } from '../../validators/authentication.validator';
 
 @Component({
   template: '',
 })
-export abstract class AbstractFormAuthenticationComponent {
+export abstract class AbstractFormAuthenticationComponent implements OnInit {
   private authenticationService: AuthenticationService;
+  private userService: UserService;
   private toastService: ToastService;
 
   form: FormGroup;
@@ -26,16 +28,19 @@ export abstract class AbstractFormAuthenticationComponent {
     const injector = GlobalInjector.injector;
 
     this.authenticationService = injector.get(AuthenticationService);
+    this.userService = injector.get(UserService);
     this.toastService = injector.get(ToastService);
-
-    const fb = injector.get(FormBuilder);
-
-    this.mountForm(fb);
   }
 
   abstract isSignUpPage(): boolean;
 
-  mountForm(fb: FormBuilder) {
+  ngOnInit(): void {
+    this.mountForm();
+  }
+
+  mountForm() {
+    const fb = GlobalInjector.injector.get(FormBuilder);
+
     this.form = fb.group(
       {
         username: [
@@ -46,6 +51,7 @@ export abstract class AbstractFormAuthenticationComponent {
               Validators.minLength(2),
               Validators.maxLength(25),
             ],
+            asyncValidators: [this.validateUsername()],
             updateOn: 'blur',
           },
         ],
@@ -56,7 +62,7 @@ export abstract class AbstractFormAuthenticationComponent {
               Validators.required,
               Validators.minLength(8),
               Validators.maxLength(25),
-              this.matchValidator('confirmPassword', true),
+              this.validatePasswords('confirmPassword', true),
             ],
             updateOn: 'blur',
           },
@@ -64,7 +70,7 @@ export abstract class AbstractFormAuthenticationComponent {
         confirmPassword: [
           '',
           {
-            validators: [this.matchValidator('password')],
+            validators: [this.validatePasswords('password')],
             updateOn: 'blur',
           },
         ],
@@ -73,28 +79,18 @@ export abstract class AbstractFormAuthenticationComponent {
     );
   }
 
-  matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!this.isSignUpPage()) {
-        return null;
-      }
+  validateUsername() {
+    const abortValidation = !this.isSignUpPage();
+    return UserValidator.validateUsername(this.userService, abortValidation);
+  }
 
-      if (control.parent && reverse) {
-        const c = (control.parent?.controls as any)[matchTo];
-
-        if (c) {
-          c.updateValueAndValidity();
-        }
-
-        return null;
-      }
-
-      return !!control.parent &&
-        !!control.parent.value &&
-        control.value === (control.parent?.controls as any)[matchTo].value
-        ? null
-        : { matching: true };
-    };
+  validatePasswords(matchTo: string, reverse?: boolean) {
+    const abortValidation = !this.isSignUpPage();
+    return AuthenticationValidator.validatePasswords(
+      matchTo,
+      abortValidation,
+      reverse
+    );
   }
 
   validateForm(event: SubmitEvent) {
@@ -128,15 +124,15 @@ export abstract class AbstractFormAuthenticationComponent {
       password: password.value,
     };
 
-    this.authenticationService.Autenticate(auth as Authentication).subscribe(
-      () => {
-        alert('Success');
+    this.authenticationService.Autenticate(auth as Auth).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Successfully authenticated user!');
       },
-      (error) => {
+      error: (error) => {
         console.error('[AbstractFormAuthentication]: ', error);
         this.toastService.showError('Failed to sign in!');
-      }
-    );
+      },
+    });
   }
 
   get username() {

@@ -6,9 +6,8 @@ import { SessionService } from 'src/app/core/services';
 import { PageName } from 'src/app/shared/enums/page-name.enum';
 import { PageMaps } from 'src/app/shared/maps/page.map';
 import { environment } from 'src/environments/environment';
-import { Authentication } from '../models/authentication';
-import { AuthenticationResponse } from '../models/authentication-response';
-import { User } from '../models/user';
+import { AuthenticatedUser } from '../models/authenticated-user';
+import { Auth } from '../models/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +19,14 @@ export class AuthenticationService {
     private router: Router
   ) {}
 
-  Autenticate(auth: Authentication) {
+  Autenticate(auth: Auth) {
     const requestPath = environment.authApiUrl + '/auth';
     const request = this.http.post(requestPath, auth);
 
     return request.pipe(
       map((response: any) => response.data),
-      map((data: AuthenticationResponse) => {
-        const currentUser = Object.assign(new User(), auth, data);
+      map((data: AuthenticatedUser) => {
+        const currentUser = Object.assign(new Auth(), auth, data);
 
         this.sessionService.setCurrentUSer(currentUser);
 

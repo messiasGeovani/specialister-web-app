@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/authentication/models/user';
+import { AuthenticatedUser } from 'src/app/authentication/models/authenticated-user';
 import { LocalStorageService } from '../';
 
 @Injectable({
@@ -9,11 +9,11 @@ export class SessionService {
   private keyCurrentUser = 'v_U';
   private keys = [this.keyCurrentUser];
 
-  private currentUser?: User | null;
+  private currentUser?: AuthenticatedUser | null;
 
   constructor(private localStorageService: LocalStorageService) {}
 
-  getCurrentUser(): User {
+  getCurrentUser(): AuthenticatedUser {
     if (this.currentUser) {
       return this.currentUser;
     }
@@ -21,20 +21,20 @@ export class SessionService {
     return this.localStorageService.getValue(this.keyCurrentUser);
   }
 
-  setCurrentUSer(currentUser: User) {
+  setCurrentUSer(currentUser: AuthenticatedUser) {
     this.localStorageService.save(this.keyCurrentUser, currentUser);
     this.currentUser = currentUser;
   }
 
   clearSession() {
-    this.keys.forEach(key => {
+    this.keys.forEach((key) => {
       this.localStorageService.clear(key);
-    })
+    });
 
     this.currentUser = null;
   }
 
-  isLogged() : boolean {
+  isLogged(): boolean {
     const user = this.getCurrentUser();
 
     if (!user) {

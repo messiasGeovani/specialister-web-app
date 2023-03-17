@@ -26,7 +26,8 @@ export class FormAuthenticationComponent
     this.iconColors.linkedin = this.linkedinColor;
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
+    super.ngOnInit();
     this.submit.emit(this.form?.value);
   }
 
@@ -45,20 +46,17 @@ export class FormAuthenticationComponent
   }
 
   get passwordValidationMessage(): string {
-    const { password, confirmPassword } = this;
+    const { password } = this;
 
     if (password.hasError('required')) {
       return 'Password cannot be empty!';
     }
 
-    const matchingError =
-      password.hasError('matching') || confirmPassword.hasError('matching');
-
-    if (this.isSignUpPage() && confirmPassword.touched && matchingError) {
-      return "Passwords doesn't match!";
+    if (password.hasError('minlength')) {
+      return 'Password must have at least 8 characters!';
     }
 
-    return 'Password must have at least 8 characters!';
+    return "Passwords doesn't match!";
   }
 
   get googleColor(): string {
