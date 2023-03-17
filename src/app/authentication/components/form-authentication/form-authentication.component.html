@@ -10,7 +10,7 @@
       [style.display]="!isSignUpPage() ? 'visible' : 'none'"
       class="animate__animated animate__fadeInLeft animate__fast mb-3"
     >
-      <h4 class="aiglon-bold d-none d-md-block">Login</h4>
+      <h2 class="aiglon-bold d-none d-md-block">Login</h2>
       <h1 class="aiglon-bold d-md-none">Login</h1>
     </div>
 
@@ -18,7 +18,7 @@
       [style.display]="isSignUpPage() ? 'visible' : 'none'"
       class="animate__animated animate__fadeInLeft animate__fast mb-3"
     >
-      <h4 class="aiglon-bold d-none d-md-block">Sign Up</h4>
+      <h2 class="aiglon-bold d-none d-md-block">Sign Up</h2>
       <h1 class="aiglon-bold d-md-none">Sign Up</h1>
     </div>
 
@@ -99,15 +99,15 @@
       </div>
       <div
         [style.display]="!isSignUpPage() ? 'visible' : 'none'"
-        class="form-check mt-3"
+        class="form-check mt-2"
       >
         <input
-          class="form-check-input"
+          class="form-check-input cursor-pointer"
           type="checkbox"
           value=""
           id="flexCheckDefault"
         />
-        <label class="form-check-label" for="flexCheckDefault">
+        <label class="form-check-label cursor-pointer" for="flexCheckDefault">
           Remember-me
         </label>
       </div>
@@ -117,10 +117,10 @@
       <button type="submit" class="btn btn-primary w-100 mt-4 mb-1">
         <strong>{{ isSignUpPage() ? "Sign Up" : "Login" }}</strong>
       </button>
-      <div class="d-flex justify-content-end mt-1">
+      <div class="d-flex justify-content-end mt-2">
         <a
           [style.display]="!isSignUpPage() ? 'visible' : 'none'"
-          class="text-secondary"
+          class="text-secondary cursor-pointer"
         >
           Forgot Password?
         </a>

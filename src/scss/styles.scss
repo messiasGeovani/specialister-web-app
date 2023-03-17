@@ -12,7 +12,9 @@
   box-sizing: border-box;
 }
 
-*, button, input {
+*,
+button,
+input {
   @extend .aiglon;
 }
 
@@ -22,7 +24,7 @@ body,
   height: 100%;
 }
 
-.pointer {
+.cursor-pointer {
   cursor: pointer;
 }
 
@@ -37,7 +39,7 @@ body,
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
-.open > .dropdown-toggle.btn-primary {
+.open>.dropdown-toggle.btn-primary {
   @extend %base-btn;
   background-color: $blue-primary-color;
   border-color: $blue-primary-color;
