@@ -1,5 +1,5 @@
-import { Auth } from './auth';
+import { User } from 'src/app/modules/user/models/user';
 
-export class AuthenticatedUser extends Auth {
+export class AuthenticatedUser extends User {
   token: string;
 }

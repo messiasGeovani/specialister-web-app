@@ -21,7 +21,7 @@ export class SessionService {
     return this.localStorageService.getValue(this.keyCurrentUser);
   }
 
-  setCurrentUSer(currentUser: AuthenticatedUser) {
+  setCurrentUser(currentUser: AuthenticatedUser) {
     this.localStorageService.save(this.keyCurrentUser, currentUser);
     this.currentUser = currentUser;
   }

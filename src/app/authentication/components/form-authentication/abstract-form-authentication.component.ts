@@ -1,28 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { GlobalInjector } from 'src/app/core/injectors/global.injector';
 import { UserService } from 'src/app/modules/user/services/user.service';
 import { UserValidator } from 'src/app/modules/user/validators/user.validator';
 import { ToastService } from 'src/app/shared/toast/services';
-import { Auth } from '../../models/auth';
 import { AuthenticationService } from '../../services/authentication.service';
 import { AuthenticationValidator } from '../../validators/authentication.validator';
 
 @Component({
   template: '',
 })
-export abstract class AbstractFormAuthenticationComponent implements OnInit {
+export abstract class AbstractFormAuthenticationComponent
+  implements OnInit, OnDestroy
+{
   private authenticationService: AuthenticationService;
   private userService: UserService;
   private toastService: ToastService;
 
   form: FormGroup;
   isSubmitted = false;
+
+  subscriptions: Subscription[] = [];
 
   constructor() {
     const injector = GlobalInjector.injector;
@@ -36,6 +35,10 @@ export abstract class AbstractFormAuthenticationComponent implements OnInit {
 
   ngOnInit(): void {
     this.mountForm();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   mountForm() {
@@ -114,7 +117,30 @@ export abstract class AbstractFormAuthenticationComponent implements OnInit {
     return isSignUpPage ? this.signUp() : this.signIn();
   }
 
-  signUp() {}
+  signUp() {
+    const { username, password } = this;
+
+    const registrationData = {
+      username: username.value,
+      password: password.value,
+    };
+
+    const userServiceSubscribeOptions = {
+      next: () => {
+        this.toastService.showSuccess('Successfully registered user!');
+      },
+      error: (error?: any) => {
+        console.error('[AbstractFormAuthentication]: ', error);
+        this.toastService.showError('Failed to sign up!');
+      },
+    };
+
+    this.subscriptions.push(
+      this.userService
+        .signUp(registrationData)
+        .subscribe(userServiceSubscribeOptions)
+    );
+  }
 
   signIn() {
     const { username, password } = this;
@@ -124,15 +150,21 @@ export abstract class AbstractFormAuthenticationComponent implements OnInit {
       password: password.value,
     };
 
-    this.authenticationService.Autenticate(auth as Auth).subscribe({
+    const authenticationServiceSubscribeOptions = {
       next: () => {
         this.toastService.showSuccess('Successfully authenticated user!');
       },
-      error: (error) => {
+      error: (error?: any) => {
         console.error('[AbstractFormAuthentication]: ', error);
         this.toastService.showError('Failed to sign in!');
       },
-    });
+    };
+
+    this.subscriptions.push(
+      this.authenticationService
+        .Autenticate(auth)
+        .subscribe(authenticationServiceSubscribeOptions)
+    );
   }
 
   get username() {

@@ -1,37 +1,35 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
-import { SessionService } from 'src/app/core/services';
+import { HttpService, SessionService } from 'src/app/core/services';
+import { User } from 'src/app/modules/user/models/user';
+import { UserService } from 'src/app/modules/user/services/user.service';
 import { PageName } from 'src/app/shared/enums/page-name.enum';
 import { PageMaps } from 'src/app/shared/maps/page.map';
 import { environment } from 'src/environments/environment';
 import { AuthenticatedUser } from '../models/authenticated-user';
-import { Auth } from '../models/auth';
+import { TAuth } from '../types/auth.type';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationService {
+export class AuthenticationService extends HttpService {
   constructor(
     private sessionService: SessionService,
-    private http: HttpClient,
+    private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
-  Autenticate(auth: Auth) {
+  Autenticate(auth: TAuth) {
     const requestPath = environment.authApiUrl + '/auth';
-    const request = this.http.post(requestPath, auth);
+    const request = this.post<TAuth, AuthenticatedUser>(auth, requestPath);
 
     return request.pipe(
-      map((response: any) => response.data),
-      map((data: AuthenticatedUser) => {
-        const currentUser = Object.assign(new Auth(), auth, data);
-
-        this.sessionService.setCurrentUSer(currentUser);
-
-        return currentUser;
-      })
+      map((response) => response.data),
+      map(this.userService.saveCurrentUser)
     );
   }
 
@@ -42,5 +40,9 @@ export class AuthenticationService {
 
   isLogged() {
     return this.sessionService.isLogged();
+  }
+
+  getApiUrl(): string {
+    return environment.authApiUrl;
   }
 }

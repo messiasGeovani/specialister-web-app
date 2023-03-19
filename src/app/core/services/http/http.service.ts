@@ -15,7 +15,7 @@ export abstract class HttpService {
     this.httpClient = GlobalInjector.injector.get(HttpClient);
   }
 
-  get<R>(
+  protected get<R>(
     params?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
   ): Observable<HttpResponse<R>> {
@@ -24,7 +24,7 @@ export abstract class HttpService {
       .pipe(map((response: R) => CamelCaseUtils.camelizeKeys(response)));
   }
 
-  post<T, R>(
+  protected post<T, R>(
     body?: T,
     route?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
@@ -36,8 +36,8 @@ export abstract class HttpService {
     }
 
     return this.httpClient
-      .post<T>(url, body, { headers })
-      .pipe(map((response: T) => CamelCaseUtils.camelizeKeys(response)));
+      .post<HttpResponse<R>>(url, body, { headers })
+      .pipe(map((response) => CamelCaseUtils.camelizeKeys(response.data)));
   }
 
   abstract getApiUrl(): string;
