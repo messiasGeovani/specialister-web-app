@@ -1,3 +1,13 @@
 @import "/node_modules/bootstrap/scss/functions";
 @import "/node_modules/bootstrap/scss/variables";
 @import "/node_modules/bootstrap/scss/mixins";
+
+@mixin card {
+  border-radius: 8px !important;
+
+  -webkit-box-shadow: 2px 1px 10px 0px rgba(143, 143, 143, 1) !important;
+  -moz-box-shadow: 2px 1px 10px 0px rgba(143, 143, 143, 1) !important;
+  box-shadow: 2px 1px 10px 0px rgba(143, 143, 143, 1) !important;
+
+  background: white !important;
+}

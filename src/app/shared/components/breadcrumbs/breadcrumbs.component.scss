@@ -1,4 +1,5 @@
 @import 'src/scss/bootstrap';
+@import 'src/scss/utils';
 
 .breadcrumbs {
   &__card {
@@ -9,6 +10,7 @@
 @include media-breakpoint-up(md) {
   .breadcrumbs {
     &__card {
+      @include card;
       width: 75%;
     }
   }
