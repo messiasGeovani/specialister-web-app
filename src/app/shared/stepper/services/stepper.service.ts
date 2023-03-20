@@ -42,6 +42,10 @@ export class StepperService {
     this.steps[currentStepIndex - 1].isActive = true;
   }
 
+  clearSteps() {
+    this.steps = [];
+  }
+
   get currentStep(): Step {
     return this.steps.find((step) => !!step.isActive) as Step;
   }

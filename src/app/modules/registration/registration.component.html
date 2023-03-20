@@ -1,3 +1,8 @@
-<app-stepper
-  [steps]="['seila', 'seila tbm', 'sonisbleinis', 'ultimo']"
-></app-stepper>
+<app-breadcrumbs>
+  <app-form-role-definition *ngIf="isRoleStep"></app-form-role-definition>
+  <app-form-personal-data *ngIf="isPersonalDataStep"></app-form-personal-data>
+  <app-form-professional-data
+    *ngIf="isProfessionalDataStep"
+  ></app-form-professional-data>
+  <app-form-categories *ngIf="isCategoryStep"></app-form-categories>
+</app-breadcrumbs>

@@ -1,0 +1,15 @@
+@import 'src/scss/bootstrap';
+
+.breadcrumbs {
+  &__card {
+    width: 100%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .breadcrumbs {
+    &__card {
+      width: 75%;
+    }
+  }
+}
