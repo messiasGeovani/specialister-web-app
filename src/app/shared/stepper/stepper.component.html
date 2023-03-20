@@ -1,0 +1,12 @@
+<ol class="d-flex flex-wrap">
+  <li
+    *ngFor="let step of steps"
+    class="d-flex flex-column text-center stepper__item"
+    [ngClass]="{
+      'stepper__item--done': step.hasDone,
+      'stepper__item--active': step.isActive
+    }"
+  >
+    {{ step.name }}
+  </li>
+</ol>

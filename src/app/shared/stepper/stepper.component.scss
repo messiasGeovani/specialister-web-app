@@ -1,0 +1,62 @@
+@import 'src/scss/colors';
+@import 'src/scss/bootstrap';
+
+$size: 3rem;
+$spacing: 0.5rem;
+
+ol {
+  counter-reset: li-count;
+}
+
+.stepper {
+  &__item {
+    flex: 1;
+    counter-increment: li-count;
+
+    &::before {
+      @extend .d-flex,
+      .align-items-center,
+      .justify-content-center;
+
+      content: counter(li-count);
+      position: relative;
+      z-index: 1;
+      width: $size;
+      height: $size;
+      border-radius: 50%;
+      margin: 1rem auto $spacing;
+      background-color: #e0e0e0
+    }
+
+    &:not(:last-child)::after {
+      content: "";
+      position: relative;
+      top: 2.5rem;
+      left: calc(50% + calc($size / 2 + $spacing));
+      width: calc(100% - $size - calc($spacing * 2));
+      height: 2px;
+      background-color: #e0e0e0;
+      order: -1;
+    }
+
+    &--active {
+      color: $blue-primary-color;
+      font-weight: bold;
+
+      &::before {
+        color: white;
+        background: $blue-primary-color;
+      }
+    }
+
+    &--done {
+      @extend .stepper__item--active;
+
+      &:not(:last-child)::after {
+        background-color: $blue-primary-color;
+      }
+    }
+
+
+  }
+}

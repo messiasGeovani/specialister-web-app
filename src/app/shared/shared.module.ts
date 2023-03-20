@@ -10,6 +10,9 @@ import { ToastService } from './toast/services';
 import { FormFieldErrorComponent } from './components/errors';
 import { ToastComponent } from './toast/toast.component';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { StepperComponent } from './stepper/stepper.component';
+import { StepperService } from './stepper/services/stepper.service';
 
 @NgModule({
   declarations: [
@@ -21,9 +24,11 @@ import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
     FormFieldErrorComponent,
     ToastComponent,
     BodyComponent,
+    BreadcrumbsComponent,
+    StepperComponent,
   ],
   imports: [CommonModule, NgbToastModule],
-  providers: [ToastService],
+  providers: [ToastService, StepperService],
   exports: [
     NavComponent,
     FooterComponent,
@@ -32,6 +37,8 @@ import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
     LinkedinIconComponent,
     FacebookIconComponent,
     FormFieldErrorComponent,
+    BreadcrumbsComponent,
+    StepperComponent,
   ],
 })
 export class SharedModule {}
