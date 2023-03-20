@@ -9,34 +9,22 @@ import { ResponsiveService } from '../core/services';
   styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent implements OnInit, OnDestroy {
-  sub: Subscription;
+  subscription: Subscription;
   currentPage: string;
 
   constructor(
-    private responsiveService: ResponsiveService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public responsiveService: ResponsiveService
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.route
-      .data
-      .subscribe(data => this.currentPage = data['page']);
+    this.subscription = this.route.data.subscribe(
+      (data) => (this.currentPage = data['page'])
+    );
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
-
-  isMediumResolution() {
-    const { isSmall, isXSmall, isMedium } = this.responsiveService;
-
-    const isMobileOrTablet = isSmall || isXSmall;
-
-    if (isMobileOrTablet && !isMedium) {
-      return false;
-    }
-
-    return true;
+    this.subscription.unsubscribe();
   }
 
   handleSubmit(event: any) {}

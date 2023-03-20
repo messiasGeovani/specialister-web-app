@@ -1,1 +1,45 @@
-<p>form-role-definition works!</p>
+<div class="d-flex flex-column align-items-center">
+  <h1>Who are you?</h1>
+
+  <br />
+
+  <div
+    class="form__container d-flex flex-column align-items-center"
+    [ngClass]="
+      responsiveService.isDesktop() || responsiveService.isTablet()
+        ? ['my-3', 'p-5', 'bg-lightgray']
+        : ['mt-3', 'px-1']
+    "
+  >
+    <div class="d-flex flex-column flex-md-row align-items-center">
+      <app-select-button
+        iconName="work"
+        [isSelected]="selectedRole === 'specialist'"
+        (selected)="selectedRole = 'specialist'"
+      >
+        Specialist
+      </app-select-button>
+      <app-select-button
+        iconName="eye"
+        [isSelected]="selectedRole === 'explorer'"
+        (selected)="selectedRole = 'explorer'"
+        class="select-button--spaced"
+      >
+        Explorer
+      </app-select-button>
+    </div>
+
+    <br />
+
+    <p class="text-secondary text-center">
+      {{ roleDescription }}
+    </p>
+  </div>
+
+  <button
+    *ngIf="selectedRole"
+    class="btn btn-primary mt-4 mb-1 px-5 text-white"
+  >
+    <strong>Continue</strong>
+  </button>
+</div>

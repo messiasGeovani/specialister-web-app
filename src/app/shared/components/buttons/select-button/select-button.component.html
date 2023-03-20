@@ -1,0 +1,27 @@
+<span
+  class="d-flex flex-column align-items-center justify-content-center select-button"
+  [ngClass]="{
+    'select-button--active': !isSelected && isActive,
+    'select-button--selected': isSelected
+  }"
+  (click)="handleSelect()"
+  (mouseenter)="isActive = true"
+  (mouseleave)="isActive = false"
+  [style.color]="color"
+>
+  <app-work-icon
+    [style.display]="showWorkIcon ? 'initial' : 'none'"
+    [color]="color"
+    [size]="48"
+    class="mb-2"
+  ></app-work-icon>
+  <app-eye-icon
+    [style.display]="showEyeIcon ? 'initial' : 'none'"
+    [color]="color"
+    [size]="60"
+  ></app-eye-icon>
+
+  <br [style.display]="iconName ? 'initial' : 'none'" />
+
+  <ng-content></ng-content>
+</span>

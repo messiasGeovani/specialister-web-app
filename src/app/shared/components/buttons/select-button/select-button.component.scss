@@ -1,0 +1,23 @@
+@import 'src/scss/colors';
+
+.select-button {
+  height: 150px;
+  width: 150px;
+
+  border-radius: 10px;
+
+  background: white;
+
+  cursor: pointer;
+
+  &--active {
+    transition: all .2s ease-in-out;
+    transform: scale(1.1);
+    background: $blue-primary-color;
+  }
+
+  &--selected {
+    cursor: initial;
+    background: $blue-primary-color;
+  }
+}

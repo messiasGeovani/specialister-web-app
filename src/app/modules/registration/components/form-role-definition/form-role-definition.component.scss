@@ -1,0 +1,27 @@
+@import 'src/scss/bootstrap';
+@import 'src/scss/utils';
+
+$spacing: $spacer * 1.5;
+
+.select-button {
+  &--spaced {
+    margin-top: $spacing;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .form {
+    &__container {
+      width: 600px;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .select-button {
+    &--spaced {
+      margin-left: $spacing;
+      margin-top: 0;
+    }
+  }
+}

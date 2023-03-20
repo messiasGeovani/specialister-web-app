@@ -1,8 +1,17 @@
 <div class="d-flex flex-column align-items-center">
-  <div class="breadcrumbs__card py-4">
-    <app-stepper class="w-100"></app-stepper>
+  <div
+    class="py-5"
+    [ngClass]="{ breadcrumbs: hideSteps, breadcrumbs__card: !hideSteps }"
+  >
+    <app-stepper
+      class="w-100"
+      [style.display]="hideSteps ? 'none' : 'initial'"
+    ></app-stepper>
 
-    <div class="d-flex justify-content-center mt-5">
+    <div
+      class="d-flex justify-content-center"
+      [ngClass]="{ 'mt-5': !hideSteps }"
+    >
       <ng-content></ng-content>
     </div>
   </div>

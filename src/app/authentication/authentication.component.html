@@ -1,5 +1,5 @@
 <div
-  *ngIf="isMediumResolution()"
+  *ngIf="responsiveService.isDesktop()"
   class="h-100 d-none d-md-flex justify-content-center align-items-center"
 >
   <div class="row no-spacing w-100">
@@ -21,7 +21,7 @@
 </div>
 
 <app-form-authentication
-  *ngIf="!isMediumResolution()"
+  *ngIf="!responsiveService.isDesktop()"
   [page]="currentPage"
   class="d-md-none"
   (handleSubmit)="handleSubmit($event)"

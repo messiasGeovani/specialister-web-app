@@ -1,18 +1,21 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavComponent, BodyComponent, FooterComponent } from './layout';
+import { NgModule } from '@angular/core';
+import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { BreadcrumbsComponent } from './components/breadcrumbs';
+import { SelectButtonComponent } from './components/buttons';
+import { FormFieldErrorComponent } from './components/errors';
 import {
+  EyeIconComponent,
+  FacebookIconComponent,
   GoogleIconComponent,
   LinkedinIconComponent,
-  FacebookIconComponent,
 } from './components/icons';
-import { ToastService } from './toast/services';
-import { FormFieldErrorComponent } from './components/errors';
-import { ToastComponent } from './toast/toast.component';
-import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
-import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
-import { StepperComponent } from './stepper/stepper.component';
+import { BodyComponent, FooterComponent, NavComponent } from './layout';
 import { StepperService } from './stepper/services/stepper.service';
+import { StepperComponent } from './stepper/stepper.component';
+import { ToastService } from './toast/services';
+import { ToastComponent } from './toast/toast.component';
+import { WorkIconComponent } from './components/icons';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,9 @@ import { StepperService } from './stepper/services/stepper.service';
     BodyComponent,
     BreadcrumbsComponent,
     StepperComponent,
+    SelectButtonComponent,
+    EyeIconComponent,
+    WorkIconComponent,
   ],
   imports: [CommonModule, NgbToastModule],
   providers: [ToastService, StepperService],
@@ -39,6 +45,9 @@ import { StepperService } from './stepper/services/stepper.service';
     FormFieldErrorComponent,
     BreadcrumbsComponent,
     StepperComponent,
+    SelectButtonComponent,
+    EyeIconComponent,
+    WorkIconComponent,
   ],
 })
 export class SharedModule {}

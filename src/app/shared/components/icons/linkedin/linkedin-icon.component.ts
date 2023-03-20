@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { BaseIconComponent } from '../base/base-icon.component';
 
 @Component({
   selector: 'app-linkedin-icon',
   templateUrl: './linkedin-icon.component.html',
   styleUrls: ['./linkedin-icon.component.scss'],
 })
-export class LinkedinIconComponent {
-  @Input('size') widthAndHeight: number = 30;
-  @Input('color') fill: string;
+export class LinkedinIconComponent extends BaseIconComponent {
+  constructor() {
+    super();
 
-  get size(): string {
-    return `${this.widthAndHeight}px`;
+    this.widthAndHeight = 30;
   }
 }

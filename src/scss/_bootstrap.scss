@@ -1,1 +1,45 @@
 @import "bootstrap/scss/bootstrap";
+
+.bg-lightgray {
+  background: rgb(238, 238, 238);
+}
+
+.ml-1 {
+  margin-left: ($spacer * .25) !important;
+}
+
+.ml-2 {
+  margin-left: ($spacer * .5) !important;
+}
+
+.ml-3 {
+  margin-left: $spacer !important;
+}
+
+.ml-4 {
+  margin-left: ($spacer * 1.5) !important;
+}
+
+.ml-5 {
+  margin-left: ($spacer * 2) !important;
+}
+
+.mr-1 {
+  margin-right: ($spacer * .25) !important;
+}
+
+.mr-2 {
+  margin-right: ($spacer * .5) !important;
+}
+
+.mr-3 {
+  margin-right: $spacer !important;
+}
+
+.mr-4 {
+  margin-right: ($spacer * 1.5) !important;
+}
+
+.mr-5 {
+  margin-right: ($spacer * 2) !important;
+}

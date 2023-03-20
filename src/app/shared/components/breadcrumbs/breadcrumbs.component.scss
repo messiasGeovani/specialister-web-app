@@ -1,9 +1,19 @@
 @import 'src/scss/bootstrap';
 @import 'src/scss/utils';
 
+%full-width {
+  width: 100%;
+
+  @include media-breakpoint-up(md) {
+    width: 75%;
+  }
+}
+
 .breadcrumbs {
+  @extend %full-width;
+
   &__card {
-    width: 100%;
+    @extend .breadcrumbs;
   }
 }
 
@@ -11,7 +21,6 @@
   .breadcrumbs {
     &__card {
       @include card;
-      width: 75%;
     }
   }
 }

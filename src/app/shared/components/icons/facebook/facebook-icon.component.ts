@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { BaseIconComponent } from '../base/base-icon.component';
 
 @Component({
   selector: 'app-facebook-icon',
   templateUrl: './facebook-icon.component.html',
-  styleUrls: ['./facebook-icon.component.scss']
+  styleUrls: ['./facebook-icon.component.scss'],
 })
-export class FacebookIconComponent {
-  @Input('size') widthAndHeight: number = 24;
-  @Input('color') fill: string = '#0066ff';
+export class FacebookIconComponent extends BaseIconComponent {
+  constructor() {
+    super();
 
-  get size(): string {
-    return `${this.widthAndHeight}px`;
+    this.widthAndHeight = 24;
+    this.fill = '#0066ff';
   }
 }
