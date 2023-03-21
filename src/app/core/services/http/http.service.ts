@@ -40,5 +40,14 @@ export abstract class HttpService {
       .pipe(map((response) => CamelCaseUtils.camelizeKeys(response.data)));
   }
 
+  protected patch<R>(
+    params?: string,
+    headers?: HttpHeaders | { [header: string]: string | string[] }
+  ): Observable<HttpResponse<R>> {
+    return this.httpClient
+      .patch<R>(`${this.getApiUrl()}${params ? params : ''}`, { headers })
+      .pipe(map((response: R) => CamelCaseUtils.camelizeKeys(response)));
+  }
+
   abstract getApiUrl(): string;
 }

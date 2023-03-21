@@ -24,6 +24,23 @@ export class UserService extends HttpService {
     );
   }
 
+  updateUserRole(role: string) {
+    if (!role) {
+      throw new Error(
+        '[UserService::updateUserRole()]: role param cannot be empty.'
+      );
+    }
+
+    if (role !== 'specialist' && role !== 'explorer') {
+      throw new Error('[UserService::updateUserRole()]: invalid role.');
+    }
+
+    return this.patch<AuthenticatedUser>(`/roles/${role}`).pipe(
+      map((response) => response.data),
+      map(this.saveCurrentUser)
+    );
+  }
+
   saveCurrentUser(data: AuthenticatedUser) {
     const currentUser = Object.assign(new AuthenticatedUser(), data);
 

@@ -1,4 +1,7 @@
-<div class="d-flex flex-column align-items-center">
+<div
+  class="d-flex flex-column align-items-center animate__animated animate__fadeInRight animate__normal"
+  #formContainer
+>
   <h1>Who are you?</h1>
 
   <br />
@@ -37,6 +40,7 @@
   </div>
 
   <button
+    (click)="setUserRole()"
     *ngIf="selectedRole"
     class="btn btn-primary mt-4 mb-1 px-5 text-white"
   >

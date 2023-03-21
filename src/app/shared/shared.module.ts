@@ -10,7 +10,7 @@ import {
   GoogleIconComponent,
   LinkedinIconComponent,
 } from './components/icons';
-import { BodyComponent, FooterComponent, NavComponent } from './layout';
+import { FooterComponent, NavComponent } from './layout';
 import { StepperService } from './stepper/services/stepper.service';
 import { StepperComponent } from './stepper/stepper.component';
 import { ToastService } from './toast/services';
@@ -26,7 +26,6 @@ import { WorkIconComponent } from './components/icons';
     FacebookIconComponent,
     FormFieldErrorComponent,
     ToastComponent,
-    BodyComponent,
     BreadcrumbsComponent,
     StepperComponent,
     SelectButtonComponent,
@@ -38,7 +37,6 @@ import { WorkIconComponent } from './components/icons';
   exports: [
     NavComponent,
     FooterComponent,
-    BodyComponent,
     GoogleIconComponent,
     LinkedinIconComponent,
     FacebookIconComponent,
@@ -48,6 +46,7 @@ import { WorkIconComponent } from './components/icons';
     SelectButtonComponent,
     EyeIconComponent,
     WorkIconComponent,
+    ToastComponent,
   ],
 })
 export class SharedModule {}
