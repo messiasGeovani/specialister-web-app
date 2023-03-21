@@ -24,10 +24,7 @@ export class AuthenticationService extends HttpService {
   }
 
   Autenticate(auth: TAuth) {
-    const requestPath = environment.authApiUrl + '/auth';
-    const request = this.post<TAuth, AuthenticatedUser>(auth, requestPath);
-
-    return request.pipe(
+    return this.post<TAuth, AuthenticatedUser>(auth).pipe(
       map((response) => response.data),
       map(this.userService.saveCurrentUser)
     );

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GlobalInjector } from 'src/app/core/injectors/global.injector';
+import { HttpStatus } from 'src/app/core/models';
 import { UserService } from 'src/app/modules/user/services/user.service';
 import { UserValidator } from 'src/app/modules/user/validators/user.validator';
 import { ToastService } from 'src/app/shared/toast/services';
@@ -21,7 +22,9 @@ export abstract class AbstractFormAuthenticationComponent
   form: FormGroup;
   isSubmitted = false;
 
-  subscriptions: Subscription[] = [];
+  isLoading = false;
+
+  subscription: Subscription;
 
   constructor() {
     const injector = GlobalInjector.injector;
@@ -38,7 +41,7 @@ export abstract class AbstractFormAuthenticationComponent
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscription.unsubscribe();
   }
 
   mountForm() {
@@ -104,6 +107,12 @@ export abstract class AbstractFormAuthenticationComponent
 
     event.preventDefault();
 
+    username.setErrors({ incorrect: null });
+    password.setErrors({ incorrect: null });
+
+    username.updateValueAndValidity();
+    password.updateValueAndValidity();
+
     if (username.invalid && password.invalid) {
       this.toastService.showError('Please fill in the form correctly');
       return;
@@ -113,6 +122,8 @@ export abstract class AbstractFormAuthenticationComponent
       this.toastService.showError('Please fill in the form correctly');
       return;
     }
+
+    this.isLoading = true;
 
     return isSignUpPage ? this.signUp() : this.signIn();
   }
@@ -133,13 +144,18 @@ export abstract class AbstractFormAuthenticationComponent
         console.error('[AbstractFormAuthentication]: ', error);
         this.toastService.showError('Failed to sign up!');
       },
+      complete: () => {
+        this.isLoading = false;
+      },
     };
 
-    this.subscriptions.push(
-      this.userService
-        .signUp(registrationData)
-        .subscribe(userServiceSubscribeOptions)
-    );
+    this.subscription = this.userService
+      .signUp(registrationData)
+      .subscribe(userServiceSubscribeOptions);
+
+    this.subscription.add(() => {
+      this.isLoading = false;
+    });
   }
 
   signIn() {
@@ -154,17 +170,33 @@ export abstract class AbstractFormAuthenticationComponent
       next: () => {
         this.toastService.showSuccess('Successfully authenticated user!');
       },
-      error: (error?: any) => {
-        console.error('[AbstractFormAuthentication]: ', error);
+      error: (error: HttpStatus) => {
+        error.errors.map((err) =>
+          console.error('[AbstractFormAuthentication]:', err)
+        );
+
+        if (error.status === 400) {
+          this.isSubmitted = false;
+
+          this.username.setErrors({ incorrect: true });
+          this.password.setErrors({ incorrect: true });
+
+          error.errors.map((err) => this.toastService.showError(err));
+
+          return;
+        }
+
         this.toastService.showError('Failed to sign in!');
       },
     };
 
-    this.subscriptions.push(
-      this.authenticationService
-        .Autenticate(auth)
-        .subscribe(authenticationServiceSubscribeOptions)
-    );
+    this.subscription = this.authenticationService
+      .Autenticate(auth)
+      .subscribe(authenticationServiceSubscribeOptions);
+
+    this.subscription.add(() => {
+      this.isLoading = false;
+    });
   }
 
   get username() {

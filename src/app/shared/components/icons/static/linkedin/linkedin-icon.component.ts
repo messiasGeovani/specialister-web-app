@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BaseIconComponent } from '../base/base-icon.component';
+import { BaseIconComponent } from '../../base/base-icon.component';
 
 @Component({
   selector: 'app-linkedin-icon',

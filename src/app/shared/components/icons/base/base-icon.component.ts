@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
 })
 export abstract class BaseIconComponent {
   @Input('size') widthAndHeight: number;
-  @Input('color') fill: string;
+  @Input() color: string;
 
   get size(): string {
     return `${this.widthAndHeight}px`;

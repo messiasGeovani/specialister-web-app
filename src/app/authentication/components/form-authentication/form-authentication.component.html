@@ -113,8 +113,20 @@
     </div>
 
     <div class="animate__animated animate__fadeInLeft animate__medium">
-      <button type="submit" class="btn btn-primary w-100 mt-4 mb-1">
-        <strong>{{ isSignUpPage() ? "Sign Up" : "Login" }}</strong>
+      <button
+        [disabled]="isLoading"
+        type="submit"
+        class="btn btn-primary w-100 mt-4 mb-1"
+        [ngClass]="{ 'p-0': isLoading, 'py-2': !isLoading }"
+      >
+        <strong [style.display]="isLoading ? 'none' : 'initial'">
+          {{ isSignUpPage() ? "Sign Up" : "Login" }}
+        </strong>
+        <app-spinner-icon
+          [style.display]="!isLoading ? 'none' : 'initial'"
+          [size]="40"
+          color="white"
+        ></app-spinner-icon>
       </button>
       <div class="d-flex justify-content-end mt-2">
         <a

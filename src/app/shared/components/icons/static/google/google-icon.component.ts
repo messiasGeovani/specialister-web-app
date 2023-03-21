@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BaseIconComponent } from '../base/base-icon.component';
+import { BaseIconComponent } from '../../base/base-icon.component';
 
 @Component({
   selector: 'app-google-icon',
@@ -10,6 +10,6 @@ export class GoogleIconComponent extends BaseIconComponent {
     super();
 
     this.widthAndHeight = 50;
-    this.fill = '#0066ff';
+    this.color = '#0066ff';
   }
 }

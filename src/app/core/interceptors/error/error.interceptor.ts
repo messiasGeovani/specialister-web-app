@@ -4,6 +4,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthenticationService } from 'src/app/authentication/services/authentication.service';
@@ -18,21 +19,19 @@ export class ErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      catchError((err) => {
+      catchError((err: HttpErrorResponse) => {
         const authenticationService = this.Injector.get(AuthenticationService);
         const httpStatus = new HttpStatus(
           err.status,
-          err.statusText,
-          err.errors
+          err.message,
+          err.error.errors
         );
 
         if (httpStatus.status === 401) {
           authenticationService.logout();
         }
 
-        return throwError(
-          () => new Error(httpStatus.statusText, httpStatus as ErrorOptions)
-        );
+        return throwError(() => httpStatus);
       })
     );
   }

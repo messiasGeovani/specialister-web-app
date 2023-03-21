@@ -42,6 +42,18 @@ export class FormAuthenticationComponent
       return 'Username cannot be empty!';
     }
 
+    if (username.hasError('incorrect')) {
+      return 'Username or password is incorrect!';
+    }
+
+    if (username.hasError('usernameAlreadyExists')) {
+      return 'Username already exists!';
+    }
+
+    if (username.hasError('verificationFailed')) {
+      return 'Failed to verify username!';
+    }
+
     return 'Username must have ate least 2 characters!';
   }
 
@@ -54,6 +66,10 @@ export class FormAuthenticationComponent
 
     if (password.hasError('minlength')) {
       return 'Password must have at least 8 characters!';
+    }
+
+    if (password.hasError('incorrect')) {
+      return 'Username or password is incorrect!';
     }
 
     return "Passwords doesn't match!";
