@@ -25,8 +25,7 @@ export class AuthenticationService extends HttpService {
 
   Autenticate(auth: TAuth) {
     return this.post<TAuth, AuthenticatedUser>(auth).pipe(
-      map((response) => response.data),
-      map(this.userService.saveCurrentUser)
+      map((data) => this.userService.saveCurrentUser(data))
     );
   }
 

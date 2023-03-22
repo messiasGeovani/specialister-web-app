@@ -7,30 +7,6 @@ import { AbstractControl } from '@angular/forms';
   styleUrls: ['./form-field-error.component.scss'],
 })
 export class FormFieldErrorComponent {
-  @Input() isFormSubmited?: boolean;
-  @Input() control?: AbstractControl;
-  @Input() controls?: AbstractControl[];
-  @Input() message: string;
-
-  private hasAnyErrorInControList(): boolean {
-    if (!this.controls) {
-      return false;
-    }
-
-    return this.controls.some((control) => {
-      const canExecuteValidation = this.isFormSubmited || control.touched;
-      return canExecuteValidation && control.invalid;
-    });
-  }
-
-  hasErrors(): boolean {
-    if (this.controls?.length) {
-      return this.hasAnyErrorInControList();
-    }
-
-    const canExecuteValidation = this.isFormSubmited || this.control?.touched;
-    const hasControlError = canExecuteValidation && this.control?.invalid;
-
-    return hasControlError || false;
-  }
+  @Input() visible: boolean;
+  @Input() message?: string;
 }

@@ -1,6 +1,8 @@
+<app-toast></app-toast>
 <div
   *ngIf="responsiveService.isDesktop()"
-  class="h-100 d-none d-md-flex justify-content-center align-items-center"
+  class="h-100 d-none d-md-flex justify-content-center align-items-center animate__animated"
+  #formContainer
 >
   <div class="row no-spacing w-100">
     <div class="col-md d-none d-md-block">
@@ -12,8 +14,10 @@
     </div>
     <div class="col-md-4 no-spacing px-md-4">
       <app-form-authentication
-        [page]="currentPage"
-        (handleSubmit)="handleSubmit($event)"
+        [isSignUpPage]="isSignUpPage"
+        [isSubmitted]="isFormSubmitted"
+        [isLoading]="isLoading"
+        (submitForm)="submit($event)"
       ></app-form-authentication>
     </div>
     <div class="col-md-1"></div>
@@ -22,7 +26,10 @@
 
 <app-form-authentication
   *ngIf="!responsiveService.isDesktop()"
-  [page]="currentPage"
+  [isSignUpPage]="isSignUpPage"
+  [isSubmitted]="isFormSubmitted"
+  [isLoading]="isLoading"
+  (submitForm)="submit($event)"
   class="d-md-none"
-  (handleSubmit)="handleSubmit($event)"
+  #formContainer
 ></app-form-authentication>

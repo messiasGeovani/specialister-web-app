@@ -14,13 +14,12 @@ export class UserService extends HttpService {
   }
 
   checkIfUsernameExists(username: string) {
-    return this.get<void>(`/usernames/${username}`);
+    return this.get<any>(`/usernames/${username}`);
   }
 
   signUp(user: TAuth) {
     return this.post<TAuth, AuthenticatedUser>(user).pipe(
-      map((response) => response.data),
-      map(this.saveCurrentUser)
+      map((data) => this.saveCurrentUser(data))
     );
   }
 
@@ -36,8 +35,9 @@ export class UserService extends HttpService {
     }
 
     return this.patch<AuthenticatedUser>(`/roles/${role}`).pipe(
-      map((response) => response.data),
-      map(this.saveCurrentUser)
+      map((data) => {
+        this.saveCurrentUser(data);
+      })
     );
   }
 

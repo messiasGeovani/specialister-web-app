@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { AbstractFormAuthenticationComponent } from './abstract-form-authentication.component';
 
 @Component({
@@ -10,9 +18,6 @@ export class FormAuthenticationComponent
   extends AbstractFormAuthenticationComponent
   implements OnInit
 {
-  @Input() page: string;
-  @Output() submit = new EventEmitter();
-
   iconColors = {
     google: '',
     facebook: '',
@@ -21,58 +26,140 @@ export class FormAuthenticationComponent
 
   constructor() {
     super();
+
     this.iconColors.google = this.googleColor;
     this.iconColors.facebook = this.facebookColor;
     this.iconColors.linkedin = this.linkedinColor;
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-    this.submit.emit(this.form?.value);
-  }
-
-  isSignUpPage(): boolean {
-    return this.page === 'sign-up';
-  }
-
-  get usernameValidationMessage(): string {
+  get usernameValidation(): any {
     const { username } = this;
+    const canValidate = this.isSubmitted || username.touched;
+
+    if (!canValidate || !username.invalid) {
+      return {
+        hasError: false,
+      };
+    }
 
     if (username.hasError('required')) {
-      return 'Username cannot be empty!';
+      return {
+        hasError: true,
+        message: 'Username cannot be empty!',
+      };
     }
 
     if (username.hasError('incorrect')) {
-      return 'Username or password is incorrect!';
+      return {
+        hasError: true,
+        message: 'Username or password is incorrect!',
+      };
+    }
+
+    if (!this.isSignUpPage) {
+      return {
+        hasError: false,
+      };
     }
 
     if (username.hasError('usernameAlreadyExists')) {
-      return 'Username already exists!';
+      return {
+        hasError: true,
+        message: 'Username already exists!',
+      };
     }
 
     if (username.hasError('verificationFailed')) {
-      return 'Failed to verify username!';
+      return {
+        hasError: true,
+        message: 'Failed to verify username!',
+      };
     }
 
-    return 'Username must have ate least 2 characters!';
+    if (username.hasError('minlength') || username.hasError('maxlength')) {
+      return {
+        hasError: true,
+        message: 'Username must have between 2 and 25 characters!',
+      };
+    }
+
+    return {
+      hasError: true,
+      message: 'Invalid username.',
+    };
   }
 
-  get passwordValidationMessage(): string {
-    const { password } = this;
+  get passwordValidation(): any {
+    const { password, confirmPassword } = this;
 
-    if (password.hasError('required')) {
-      return 'Password cannot be empty!';
+    const canValidate = this.isSubmitted || password.touched;
+    const wasInputsTouched = password.touched && confirmPassword.touched;
+
+    const passwordMatchingError =
+      password.hasError('matching') || confirmPassword.hasError('matching');
+
+    if (this.isSignUpPage && wasInputsTouched && passwordMatchingError) {
+      return {
+        hasError: true,
+        message: "Passwords doesn't match!",
+      };
     }
 
-    if (password.hasError('minlength')) {
-      return 'Password must have at least 8 characters!';
+    if (!canValidate || !password.invalid) {
+      return {
+        hasErrors: false,
+      };
+    }
+
+    if (password.hasError('required')) {
+      return {
+        hasError: true,
+        message: 'Password cannot be empty!',
+      };
     }
 
     if (password.hasError('incorrect')) {
-      return 'Username or password is incorrect!';
+      return {
+        hasError: true,
+        message: 'Username or password is incorrect!',
+      };
     }
 
-    return "Passwords doesn't match!";
+    if (password.hasError('minlength')) {
+      return {
+        hasError: true,
+        message: 'Password must have at least 8 characters!',
+      };
+    }
+
+    return {
+      hasError: true,
+      message: 'Invalid password.',
+    };
+  }
+
+  get confirmPasswordValidation() {
+    const { password, confirmPassword } = this;
+    const wasInputsTouched = password.touched && confirmPassword.touched;
+    const canValidate = this.isSubmitted || wasInputsTouched;
+
+    if (!this.isSignUpPage || !canValidate || !confirmPassword.invalid) {
+      return {
+        hasError: false,
+      };
+    }
+
+    if (confirmPassword.hasError('matching')) {
+      return {
+        hasError: true,
+        message: "Passwords doesn't match!",
+      };
+    }
+
+    return {
+      hasError: true,
+      message: 'Invalid Password.',
+    };
   }
 
   get googleColor(): string {

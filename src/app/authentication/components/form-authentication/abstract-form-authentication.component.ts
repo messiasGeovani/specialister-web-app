@@ -1,12 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GlobalInjector } from 'src/app/core/injectors/global.injector';
-import { HttpStatus } from 'src/app/core/models';
 import { UserService } from 'src/app/modules/user/services/user.service';
 import { UserValidator } from 'src/app/modules/user/validators/user.validator';
 import { ToastService } from 'src/app/shared/toast/services';
-import { AuthenticationService } from '../../services/authentication.service';
 import { AuthenticationValidator } from '../../validators/authentication.validator';
 
 @Component({
@@ -15,32 +20,35 @@ import { AuthenticationValidator } from '../../validators/authentication.validat
 export abstract class AbstractFormAuthenticationComponent
   implements OnInit, OnDestroy
 {
-  private authenticationService: AuthenticationService;
   private userService: UserService;
   private toastService: ToastService;
 
-  form: FormGroup;
-  isSubmitted = false;
+  @Input() isLoading = false;
+  @Input() isSubmitted = false;
+  @Input() isSignUpPage: boolean;
 
-  isLoading = false;
+  @Output('submitForm') submit = new EventEmitter();
+
+  form: FormGroup;
 
   subscription: Subscription;
 
   constructor() {
     const injector = GlobalInjector.injector;
 
-    this.authenticationService = injector.get(AuthenticationService);
     this.userService = injector.get(UserService);
     this.toastService = injector.get(ToastService);
   }
-
-  abstract isSignUpPage(): boolean;
 
   ngOnInit(): void {
     this.mountForm();
   }
 
   ngOnDestroy(): void {
+    if (!this.subscription) {
+      return;
+    }
+
     this.subscription.unsubscribe();
   }
 
@@ -70,14 +78,14 @@ export abstract class AbstractFormAuthenticationComponent
               Validators.maxLength(25),
               this.validatePasswords('confirmPassword', true),
             ],
-            updateOn: 'blur',
+            updateOn: 'change',
           },
         ],
         confirmPassword: [
           '',
           {
             validators: [this.validatePasswords('password')],
-            updateOn: 'blur',
+            updateOn: 'change',
           },
         ],
       },
@@ -86,12 +94,12 @@ export abstract class AbstractFormAuthenticationComponent
   }
 
   validateUsername() {
-    const abortValidation = !this.isSignUpPage();
+    const abortValidation = !this.isSignUpPage;
     return UserValidator.validateUsername(this.userService, abortValidation);
   }
 
   validatePasswords(matchTo: string, reverse?: boolean) {
-    const abortValidation = !this.isSignUpPage();
+    const abortValidation = !this.isSignUpPage;
     return AuthenticationValidator.validatePasswords(
       matchTo,
       abortValidation,
@@ -101,17 +109,19 @@ export abstract class AbstractFormAuthenticationComponent
 
   validateForm(event: SubmitEvent) {
     const { username, password, confirmPassword } = this;
-    const isSignUpPage = this.isSignUpPage();
+    const isSignUpPage = this.isSignUpPage;
 
     this.isSubmitted = true;
 
     event.preventDefault();
 
-    username.setErrors({ incorrect: null });
-    password.setErrors({ incorrect: null });
+    if (username.hasError('incorrect') || password.hasError('incorrect')) {
+      username.setErrors({ incorrect: null });
+      password.setErrors({ incorrect: null });
 
-    username.updateValueAndValidity();
-    password.updateValueAndValidity();
+      username.updateValueAndValidity();
+      password.updateValueAndValidity();
+    }
 
     if (username.invalid && password.invalid) {
       this.toastService.showError('Please fill in the form correctly');
@@ -123,80 +133,12 @@ export abstract class AbstractFormAuthenticationComponent
       return;
     }
 
-    this.isLoading = true;
-
-    return isSignUpPage ? this.signUp() : this.signIn();
-  }
-
-  signUp() {
-    const { username, password } = this;
-
-    const registrationData = {
-      username: username.value,
-      password: password.value,
+    const submitData = {
+      username: isSignUpPage ? username.value : username,
+      password: isSignUpPage ? password.value : password,
     };
 
-    const userServiceSubscribeOptions = {
-      next: () => {
-        this.toastService.showSuccess('Successfully registered user!');
-      },
-      error: (error?: any) => {
-        console.error('[AbstractFormAuthentication]: ', error);
-        this.toastService.showError('Failed to sign up!');
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    };
-
-    this.subscription = this.userService
-      .signUp(registrationData)
-      .subscribe(userServiceSubscribeOptions);
-
-    this.subscription.add(() => {
-      this.isLoading = false;
-    });
-  }
-
-  signIn() {
-    const { username, password } = this;
-
-    const auth = {
-      username: username.value,
-      password: password.value,
-    };
-
-    const authenticationServiceSubscribeOptions = {
-      next: () => {
-        this.toastService.showSuccess('Successfully authenticated user!');
-      },
-      error: (error: HttpStatus) => {
-        error.errors.map((err) =>
-          console.error('[AbstractFormAuthentication]:', err)
-        );
-
-        if (error.status === 400) {
-          this.isSubmitted = false;
-
-          this.username.setErrors({ incorrect: true });
-          this.password.setErrors({ incorrect: true });
-
-          error.errors.map((err) => this.toastService.showError(err));
-
-          return;
-        }
-
-        this.toastService.showError('Failed to sign in!');
-      },
-    };
-
-    this.subscription = this.authenticationService
-      .Autenticate(auth)
-      .subscribe(authenticationServiceSubscribeOptions);
-
-    this.subscription.add(() => {
-      this.isLoading = false;
-    });
+    this.submit.emit(submitData);
   }
 
   get username() {

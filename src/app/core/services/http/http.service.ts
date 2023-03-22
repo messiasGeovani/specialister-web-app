@@ -18,17 +18,19 @@ export abstract class HttpService {
   protected get<R>(
     params?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
-  ): Observable<HttpResponse<R>> {
+  ): Observable<R> {
     return this.httpClient
-      .get<R>(`${this.getApiUrl()}${params ? params : ''}`, { headers })
-      .pipe(map((response: R) => CamelCaseUtils.camelizeKeys(response)));
+      .get<HttpResponse<R>>(`${this.getApiUrl()}${params ? params : ''}`, {
+        headers,
+      })
+      .pipe(map((response) => CamelCaseUtils.camelizeKeys(response.data)));
   }
 
   protected post<T, R>(
     body?: T,
     route?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
-  ): Observable<HttpResponse<R>> {
+  ): Observable<R> {
     let url = this.getApiUrl();
 
     if (route) {
@@ -43,10 +45,12 @@ export abstract class HttpService {
   protected patch<R>(
     params?: string,
     headers?: HttpHeaders | { [header: string]: string | string[] }
-  ): Observable<HttpResponse<R>> {
+  ): Observable<R> {
     return this.httpClient
-      .patch<R>(`${this.getApiUrl()}${params ? params : ''}`, { headers })
-      .pipe(map((response: R) => CamelCaseUtils.camelizeKeys(response)));
+      .patch<HttpResponse<R>>(`${this.getApiUrl()}${params ? params : ''}`, {
+        headers,
+      })
+      .pipe(map((response) => CamelCaseUtils.camelizeKeys(response.data)));
   }
 
   abstract getApiUrl(): string;

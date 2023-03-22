@@ -18,19 +18,16 @@ export class UserValidator {
       }
 
       return userService.checkIfUsernameExists(control.value).pipe(
-        map(() => ({ usernameAlreadyExists: true })),
+        map(({ usernameAlreadyExists }) => {
+          if (usernameAlreadyExists) {
+            return { usernameAlreadyExists };
+          }
+
+          return null;
+        }),
         catchError(async (error) => {
-          const isHttpError = error instanceof HttpStatus;
-
-          if (!isHttpError) {
-            return null;
-          }
-
-          if (error.status === 404) {
-            return null;
-          }
-
-          return of({ verificationFailed: true });
+          console.error('[UserValidator::validateUsername]', error);
+          return { verificationFailed: true };
         })
       );
     };

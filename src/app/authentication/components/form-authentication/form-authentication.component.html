@@ -7,7 +7,7 @@
     (submit)="validateForm($event)"
   >
     <div
-      [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+      [style.display]="!isSignUpPage ? 'visible' : 'none'"
       class="animate__animated animate__fadeInLeft animate__fast mb-3"
     >
       <h2 class="aiglon-bold d-none d-md-block">Login</h2>
@@ -15,7 +15,7 @@
     </div>
 
     <div
-      [style.display]="isSignUpPage() ? 'visible' : 'none'"
+      [style.display]="isSignUpPage ? 'visible' : 'none'"
       class="animate__animated animate__fadeInLeft animate__fast mb-3"
     >
       <h2 class="aiglon-bold d-none d-md-block">Sign Up</h2>
@@ -30,18 +30,17 @@
           type="text"
           class="form-control"
           [ngClass]="{
-            'is-invalid': (isSubmitted || username.touched) && username.invalid,
+            'is-invalid': usernameValidation.hasError,
             'is-valid':
-              isSignUpPage() &&
+              isSignUpPage &&
               (isSubmitted || username.touched) &&
-              !username.invalid
+              !usernameValidation.hasError
           }"
           formControlName="username"
         />
         <app-form-field-error
-          [isFormSubmited]="isSubmitted"
-          [control]="username"
-          [message]="usernameValidationMessage"
+          [visible]="usernameValidation.hasError"
+          [message]="usernameValidation.message"
         ></app-form-field-error>
       </div>
       <div class="mt-2">
@@ -52,27 +51,20 @@
           maxlength="25"
           class="form-control"
           [ngClass]="{
-            'is-invalid':
-              ((isSubmitted || password.touched) && password.invalid) ||
-              (isSignUpPage() &&
-                (isSubmitted || confirmPassword.touched) &&
-                confirmPassword.invalid),
+            'is-invalid': passwordValidation.hasError,
             'is-valid':
-              isSignUpPage() &&
+              isSignUpPage &&
               (isSubmitted || password.touched) &&
-              !password.invalid &&
-              (isSubmitted || confirmPassword.touched) &&
-              !confirmPassword.invalid
+              !passwordValidation.hasError
           }"
           formControlName="password"
         />
         <app-form-field-error
-          [isFormSubmited]="isSubmitted"
-          [controls]="[password, confirmPassword]"
-          [message]="passwordValidationMessage"
+          [visible]="passwordValidation.hasError"
+          [message]="passwordValidation.message"
         ></app-form-field-error>
       </div>
-      <div [style.display]="isSignUpPage() ? 'visible' : 'none'" class="mt-2">
+      <div [style.display]="isSignUpPage ? 'visible' : 'none'" class="mt-2">
         <label for="form_auth_confirm_password">Confirm Password</label>
         <input
           id="form_auth_confirm_password"
@@ -80,24 +72,21 @@
           maxlength="25"
           class="form-control"
           [ngClass]="{
-            'is-invalid':
-              (isSubmitted || confirmPassword.touched) &&
-              (password.invalid || confirmPassword.invalid),
+            'is-invalid': confirmPasswordValidation.hasError,
             'is-valid':
               (isSubmitted || confirmPassword.touched) &&
-              confirmPassword.value.length &&
-              !confirmPassword.invalid
+              !confirmPasswordValidation.hasError &&
+              !passwordValidation.hasError
           }"
           formControlName="confirmPassword"
         />
         <app-form-field-error
-          [isFormSubmited]="isSubmitted"
-          [controls]="[confirmPassword, password]"
-          message="Passwords doesn't match!"
+          [visible]="confirmPasswordValidation.hasError"
+          [message]="confirmPasswordValidation.message"
         ></app-form-field-error>
       </div>
       <div
-        [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+        [style.display]="!isSignUpPage ? 'visible' : 'none'"
         class="form-check mt-2"
       >
         <input
@@ -120,7 +109,7 @@
         [ngClass]="{ 'p-0': isLoading, 'py-2': !isLoading }"
       >
         <strong [style.display]="isLoading ? 'none' : 'initial'">
-          {{ isSignUpPage() ? "Sign Up" : "Login" }}
+          {{ isSignUpPage ? "Sign Up" : "Login" }}
         </strong>
         <app-spinner-icon
           [style.display]="!isLoading ? 'none' : 'initial'"
@@ -130,7 +119,7 @@
       </button>
       <div class="d-flex justify-content-end mt-2">
         <a
-          [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+          [style.display]="!isSignUpPage ? 'visible' : 'none'"
           class="text-secondary cursor-pointer"
         >
           Forgot Password?
@@ -178,13 +167,13 @@
       </div>
 
       <p
-        [style.display]="isSignUpPage() ? 'visible' : 'none'"
+        [style.display]="isSignUpPage ? 'visible' : 'none'"
         class="mt-4 text-center"
       >
         Already an user? <a routerLink="/auth">LOGIN</a>
       </p>
       <p
-        [style.display]="!isSignUpPage() ? 'visible' : 'none'"
+        [style.display]="!isSignUpPage ? 'visible' : 'none'"
         class="mt-4 text-center"
       >
         Need an account? <a routerLink="/auth/sign-up">SIGN UP</a>
