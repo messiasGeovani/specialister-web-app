@@ -1,0 +1,23 @@
+@import "src/scss/bootstrap";
+@import "src/scss/utils";
+
+.animate__normal {
+  --animate-duration: 1.1s;
+}
+
+.animate__medium {
+  --animate-duration: 1.4s;
+}
+
+.animate__light-slow {
+  --animate-duration: 1.5s;
+}
+
+@include media-breakpoint-up(sm) {
+  .form {
+    &__container {
+      border-radius: 10px;
+      width: 600px;
+    }
+  }
+}

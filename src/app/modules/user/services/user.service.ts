@@ -17,7 +17,7 @@ export class UserService extends HttpService {
     return this.get<any>(`/usernames/${username}`);
   }
 
-  signUp(user: TAuth) {
+  createUser(user: TAuth) {
     return this.post<TAuth, AuthenticatedUser>(user).pipe(
       map((data) => this.saveCurrentUser(data))
     );
@@ -35,9 +35,7 @@ export class UserService extends HttpService {
     }
 
     return this.patch<AuthenticatedUser>(`/roles/${role}`).pipe(
-      map((data) => {
-        this.saveCurrentUser(data);
-      })
+      map((data) => this.saveCurrentUser(data))
     );
   }
 

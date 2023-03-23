@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
+import { RegistrationGuard } from './modules/registration/guards/registration.guard';
 
 const routes: Routes = [
   {
@@ -20,6 +22,17 @@ const routes: Routes = [
       import('./modules/registration/registration.module').then(
         (m) => m.RegistrationModule
       ),
+    canActivate: [AuthenticationGuard],
+    canMatch: [RegistrationGuard],
+  },
+  {
+    path: 'feed',
+    loadChildren: () =>
+      import('./modules/registration/registration.module').then(
+        (m) => m.RegistrationModule
+      ),
+    canActivate: [AuthenticationGuard],
+    canMatch: [AuthenticationGuard],
   },
 ];
 

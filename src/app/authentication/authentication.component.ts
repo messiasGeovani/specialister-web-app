@@ -12,7 +12,7 @@ import { HttpStatus } from '../core/models';
 import { ResponsiveService } from '../core/services';
 import { UserService } from '../modules/user/services/user.service';
 import { PageName } from '../shared/enums/page-name.enum';
-import { TimerUtils } from '../shared/helpers/Timer-utils';
+import { TimerUtils } from '../shared/helpers';
 import { PageMaps } from '../shared/maps/page.map';
 import { ToastService } from '../shared/toast/services';
 import { AuthenticatedUser } from './models/authenticated-user';
@@ -77,7 +77,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   sign(data: any) {
     if (this.isSignUpPage) {
       this.subscription = this.userService
-        .signUp(this.authData)
+        .createUser(this.authData)
         .subscribe(this.mountSubscriptionOptions());
 
       return;
@@ -127,14 +127,14 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
         'animate__faster'
       );
 
-      this.toastService.showSuccess('Successfull sign in!');
-
       await TimerUtils.wait(500);
 
       if (!user.role) {
         this.router.navigate([PageMaps.get(PageName.Registration)]);
         return;
       }
+
+      this.router.navigate([PageMaps.get(PageName.Registration)]);
     };
 
     return subscriptionOptions;
@@ -146,9 +146,10 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
         return;
       }
 
-      error?.errors?.map((err) =>
-        console.error('[AbstractFormAuthentication]:', err)
-      );
+      error?.errors?.map((err) => {
+        console.error('[AbstractFormAuthentication]:', err);
+        this.toastService.showError(err);
+      });
 
       this.isFormSubmitted = false;
 

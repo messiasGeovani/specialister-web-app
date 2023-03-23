@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ResponsiveService } from 'src/app/core/services';
 import { UserService } from 'src/app/modules/user/services/user.service';
-import { TimerUtils } from 'src/app/shared/helpers/Timer-utils';
+import { TimerUtils } from 'src/app/shared/helpers';
 import { StepperService } from 'src/app/shared/stepper/services/stepper.service';
 import { ToastService } from 'src/app/shared/toast/services';
 @Component({
@@ -15,6 +15,8 @@ export class FormRoleDefinitionComponent implements OnDestroy {
 
   selectedRole: string;
   subscription: Subscription;
+
+  isLoading = false;
 
   constructor(
     private userService: UserService,
@@ -50,9 +52,15 @@ export class FormRoleDefinitionComponent implements OnDestroy {
       },
     };
 
+    this.isLoading = true;
+
     this.subscription = this.userService
       .updateUserRole(this.selectedRole)
       .subscribe(subscribeOptions);
+
+    this.subscription.add(() => {
+      this.isLoading = false;
+    });
   }
 
   get roleDescription(): string {

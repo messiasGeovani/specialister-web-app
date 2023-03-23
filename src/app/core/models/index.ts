@@ -1,4 +1,2 @@
-export * from './http/http-reponse';
-export * from './http/http-status';
-
-export * from './location/location';
+export * from '../modules/http/models/response';
+export * from '../modules/http/models/http-status';

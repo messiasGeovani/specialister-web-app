@@ -1,25 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injector, NgModule, Optional, SkipSelf } from '@angular/core';
-import { ErrorInterceptor } from './interceptors';
-import { JwtInterceptor } from './interceptors';
-import { LocalStorageService } from './services/local-storage/local-storage.service';
-import { LocationService } from './services';
-import { ResponsiveService } from './services';
-import { SessionService } from './services';
 import { GlobalInjector } from './injectors/global.injector';
+import { HttpModule } from './modules/http/http.module';
+import { SessionModule } from './modules/session/session.module';
+import { LocationService, ResponsiveService } from './services';
+import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, HttpClientModule],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    LocalStorageService,
-    LocationService,
-    SessionService,
-    ResponsiveService,
-  ],
+  imports: [CommonModule, HttpModule, SessionModule],
+  providers: [LocalStorageService, LocationService, ResponsiveService],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() core: CoreModule, injector: Injector) {

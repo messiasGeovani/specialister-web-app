@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AuthenticatedUser } from 'src/app/authentication/models/authenticated-user';
-import { LocalStorageService } from '../';
+import { Profile } from 'src/app/modules/profile/models';
+import { LocalStorageService } from '../../../services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionService {
   private keyCurrentUser = 'v_U';
-  private keys = [this.keyCurrentUser];
+  private keyCurrentProfile = 'v_P';
+  private keys = [this.keyCurrentUser, this.keyCurrentProfile];
 
   private currentUser?: AuthenticatedUser | null;
+  private currentProfile?: Profile | null;
 
   constructor(private localStorageService: LocalStorageService) {}
 
@@ -24,6 +27,19 @@ export class SessionService {
   setCurrentUser(currentUser: AuthenticatedUser) {
     this.localStorageService.save(this.keyCurrentUser, currentUser);
     this.currentUser = currentUser;
+  }
+
+  getCurrentProfile(): Profile {
+    if (this.currentProfile) {
+      return this.currentProfile;
+    }
+
+    return this.localStorageService.getValue(this.keyCurrentProfile);
+  }
+
+  setCurrentProfile(currentProfile: Profile) {
+    this.localStorageService.save(this.keyCurrentProfile, currentProfile);
+    this.currentProfile = currentProfile;
   }
 
   clearSession() {

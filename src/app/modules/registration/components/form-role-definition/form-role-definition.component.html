@@ -40,10 +40,22 @@
   </div>
 
   <button
+    [disabled]="isLoading"
     (click)="setUserRole()"
     *ngIf="selectedRole"
     class="btn btn-primary mt-4 mb-1 px-5 text-white"
+    [ngClass]="{
+      'p-0': isLoading,
+      'py-2': !isLoading,
+      'w-50': responsiveService.isDesktop() || responsiveService.isTablet(),
+      'w-100': responsiveService.isXSmall
+    }"
   >
-    <strong>Continue</strong>
+    <strong [style.display]="!isLoading ? 'initial' : 'none'">Continue</strong>
+    <app-spinner-icon
+      [style.display]="isLoading ? 'initial' : 'none'"
+      [size]="40"
+      color="white"
+    ></app-spinner-icon>
   </button>
 </div>

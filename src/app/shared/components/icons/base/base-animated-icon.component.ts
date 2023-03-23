@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ColorUtils } from 'src/app/shared/helpers/color-utils';
+import { ColorUtils } from 'src/app/shared/helpers';
 import { BaseIconComponent } from './base-icon.component';
 
 @Component({

@@ -1,1 +1,108 @@
-<p>form-personal-data works!</p>
+<div
+  class="d-flex flex-column align-items-center justify-content-center animate__animated animate__fadeInRight"
+>
+  <h1>Personal Data</h1>
+  <p class="text-secondary">Tell us a little more about yourself...</p>
+
+  <br />
+
+  <form
+    [formGroup]="form"
+    class="d-flex flex-column align-items-center justify-content-center"
+    (submit)="validateForm($event)"
+  >
+    <div
+      class="form__container"
+      [ngClass]="
+        responsiveService.isDesktop() || responsiveService.isTablet()
+          ? ['my-3', 'pt-5', 'pb-4', 'bg-lightgray']
+          : ['mt-3', 'px-1']
+      "
+    >
+      <div class="d-flex flex-column align-items-center">
+        <div
+          [ngClass]="
+            responsiveService.isDesktop() || responsiveService.isTablet()
+              ? ['w-75']
+              : ['w-100']
+          "
+        >
+          <label class="mb-1" for="form_auth_username">First Name</label>
+          <input
+            id="form_persona_data_first_name"
+            type="text"
+            class="form-control"
+            formControlName="firstName"
+            [ngClass]="{
+              'is-invalid':
+                (isSubmitted || firstName.touched) &&
+                firstNameValidation.hasError,
+              'is-valid':
+                (isSubmitted || firstName.touched) &&
+                !firstNameValidation.hasError,
+              'form-control-lg':
+                responsiveService.isDesktop() || responsiveService.isTablet()
+            }"
+          />
+          <app-form-field-error
+            [visible]="firstNameValidation.hasError"
+            [message]="firstNameValidation.message"
+          ></app-form-field-error>
+        </div>
+
+        <div
+          class="mt-2"
+          [ngClass]="
+            responsiveService.isDesktop() || responsiveService.isTablet()
+              ? ['w-75']
+              : ['w-100']
+          "
+        >
+          <label class="mb-1" for="form_auth_password">Last Name</label>
+          <input
+            id="form_personal_data_last_name"
+            type="text"
+            maxlength="25"
+            class="form-control form-control-lg"
+            formControlName="lastName"
+            [ngClass]="{
+              'is-invalid':
+                (isSubmitted || lastName.touched) &&
+                lastNameValidation.hasError,
+              'is-valid':
+                (isSubmitted || lastName.touched) &&
+                !lastNameValidation.hasError,
+              'form-control-lg':
+                responsiveService.isDesktop() || responsiveService.isTablet()
+            }"
+          />
+          <app-form-field-error
+            [visible]="lastNameValidation.hasError"
+            [message]="lastNameValidation.message"
+          ></app-form-field-error>
+        </div>
+      </div>
+    </div>
+
+    <button
+      [disabled]="isLoading"
+      *ngIf="!form.invalid"
+      class="btn btn-primary mt-4 mb-1 px-5 text-white"
+      [ngClass]="{
+        'p-0': isLoading,
+        'py-2': !isLoading,
+        'w-50': responsiveService.isDesktop() || responsiveService.isTablet(),
+        'w-100': responsiveService.isXSmall
+      }"
+    >
+      <strong [style.display]="!isLoading ? 'initial' : 'none'">
+        Continue
+      </strong>
+      <app-spinner-icon
+        [style.display]="isLoading ? 'initial' : 'none'"
+        [size]="40"
+        color="white"
+      ></app-spinner-icon>
+    </button>
+  </form>
+</div>

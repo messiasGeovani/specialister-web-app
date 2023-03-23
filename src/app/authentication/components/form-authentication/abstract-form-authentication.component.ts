@@ -20,8 +20,8 @@ import { AuthenticationValidator } from '../../validators/authentication.validat
 export abstract class AbstractFormAuthenticationComponent
   implements OnInit, OnDestroy
 {
-  private userService: UserService;
-  private toastService: ToastService;
+  private userService = GlobalInjector.injector.get(UserService);
+  private toastService = GlobalInjector.injector.get(ToastService);
 
   @Input() isLoading = false;
   @Input() isSubmitted = false;
@@ -32,13 +32,6 @@ export abstract class AbstractFormAuthenticationComponent
   form: FormGroup;
 
   subscription: Subscription;
-
-  constructor() {
-    const injector = GlobalInjector.injector;
-
-    this.userService = injector.get(UserService);
-    this.toastService = injector.get(ToastService);
-  }
 
   ngOnInit(): void {
     this.mountForm();
