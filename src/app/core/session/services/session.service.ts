@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticatedUser } from 'src/app/authentication/models/authenticated-user';
 import { Profile } from 'src/app/modules/profile/models';
-import { LocalStorageService } from '../../../services';
+import { LocalStorageService } from '../../global/services';
 
 @Injectable({
   providedIn: 'root',
