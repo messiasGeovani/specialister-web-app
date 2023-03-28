@@ -29,7 +29,7 @@ export class RegistrationGuard implements CanMatch {
     const currentUser = this.sessionService.getCurrentUser();
     const currentProfile = this.sessionService.getCurrentProfile();
 
-    if (!currentUser.role || !currentProfile || currentProfile.pending) {
+    if (!currentUser.role || !currentProfile || !currentProfile.completed) {
       return true;
     }
 

@@ -1,7 +1,8 @@
-import { Location } from './location';
+import { Address } from './address';
 
 export class Person {
   firstName: string;
   lastName: string;
-  location: Location;
+  document: string;
+  address: Address;
 }

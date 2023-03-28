@@ -1,6 +1,10 @@
 import { Person } from './person';
+import { Professional } from './professional';
 
-export class Profile extends Person {
+export class Profile {
   bio: string;
-  pending: boolean;
+  Image: string | File;
+  completed?: boolean;
+  personalData: Person;
+  professionalData: Professional;
 }

@@ -1,3 +1,3 @@
-import { Profile } from '../models';
+import { Person } from '../models';
 
-export type TCreateProfile = Pick<Profile, 'firstName' | 'lastName'>;
+export type TCreateProfile = Pick<Person, 'firstName' | 'lastName'>;

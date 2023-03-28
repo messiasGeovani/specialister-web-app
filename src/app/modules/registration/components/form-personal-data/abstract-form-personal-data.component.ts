@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GlobalInjector } from 'src/app/core/injectors/global.injector';
-import { UserService } from 'src/app/modules/user/services/user.service';
+import { ALLOW_ONLY_TEXT } from 'src/app/shared/regex/patterns';
 import { ToastService } from 'src/app/shared/toast/services';
 
 @Component({
@@ -40,14 +40,22 @@ export abstract class AbstractFormPersonalDataComponent
         firstName: [
           '',
           {
-            validators: [Validators.required, Validators.maxLength(25)],
+            validators: [
+              Validators.required,
+              Validators.maxLength(25),
+              Validators.pattern(ALLOW_ONLY_TEXT),
+            ],
             updateOn: 'change',
           },
         ],
         lastName: [
           '',
           {
-            validators: [Validators.required, Validators.maxLength(25)],
+            validators: [
+              Validators.required,
+              Validators.maxLength(25),
+              Validators.pattern(ALLOW_ONLY_TEXT),
+            ],
             updateOn: 'change',
           },
         ],

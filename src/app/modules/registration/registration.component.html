@@ -3,6 +3,7 @@
   <app-breadcrumbs class="w-100" [hideSteps]="true">
     <app-form-role-definition *ngIf="isRoleStep"></app-form-role-definition>
     <app-form-personal-data *ngIf="isPersonalDataStep"></app-form-personal-data>
+    <app-form-address *ngIf="isAddressStep"></app-form-address>
     <app-form-professional-data
       *ngIf="isProfessionalDataStep"
     ></app-form-professional-data>

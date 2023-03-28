@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { HttpService, SessionService } from 'src/app/core/services';
+import { HttpService } from 'src/app/core/http/services/http.service';
+import { SessionService } from 'src/app/core/session/services/session.service';
 import { environment } from 'src/environments/environment';
 import { Profile } from '../models';
 import { TCreateProfile } from '../types/create-profile.type';
@@ -14,12 +15,12 @@ export class ProfileService extends HttpService {
   }
 
   createProfile(profile: TCreateProfile) {
-    return this.post<TCreateProfile, void>(profile).pipe(
-      map(() => this.saveCurrentProfile(profile))
+    return this.post<TCreateProfile, Profile>(profile).pipe(
+      map((data) => this.saveCurrentProfile(data))
     );
   }
 
-  saveCurrentProfile(data: Profile | TCreateProfile) {
+  saveCurrentProfile(data: Profile) {
     const currentProfile = Object.assign(new Profile(), data);
 
     this.sessionService.setCurrentProfile(currentProfile);

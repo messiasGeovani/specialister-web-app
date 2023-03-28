@@ -1,3 +1,4 @@
 export * from './person';
 export * from './profile';
-export * from './location';
+export * from './address';
+export * from './professional';

@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanMatch,
-  Route,
-  Router,
-  UrlSegment,
-  UrlTree,
-} from '@angular/router';
+import { CanActivate, CanMatch, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionService } from 'src/app/core/services';
 import { PageName } from 'src/app/shared/enums/page-name.enum';
@@ -43,12 +36,16 @@ export class AuthenticationGuard implements CanActivate, CanMatch {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    this.canActivate();
+    const isUserLogged = this.canActivate();
+
+    if (!isUserLogged) {
+      return false;
+    }
 
     const currentUser = this.sessionService.getCurrentUser();
     const currentProfile = this.sessionService.getCurrentProfile();
 
-    if (!currentUser.role || !currentProfile || currentProfile.pending) {
+    if (!currentUser.role || !currentProfile || currentProfile.completed) {
       this.router.navigate([PageMaps.get(PageName.Registration)]);
       return false;
     }

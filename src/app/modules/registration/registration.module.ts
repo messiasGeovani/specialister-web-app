@@ -9,6 +9,7 @@ import { FormProfessionalDataComponent } from './components/form-professional-da
 import { FormRoleDefinitionComponent } from './components/form-role-definition/form-role-definition.component';
 import { RegistrationRoutingModule } from './registration-routing.module';
 import { RegistrationComponent } from './registration.component';
+import { FormAddressComponent } from './components/form-address/form-address.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { RegistrationComponent } from './registration.component';
     FormPersonalDataComponent,
     FormProfessionalDataComponent,
     FormCategoriesComponent,
+    FormAddressComponent,
   ],
   imports: [
     CommonModule,

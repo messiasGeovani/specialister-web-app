@@ -36,21 +36,23 @@ export class RegistrationComponent implements OnInit {
       );
     }
 
-    if (!profile) {
+    if (!profile || !profile.personalData) {
       this.steps = pendingSteps;
       return;
     }
 
-    if (profile.firstName && profile.lastName) {
+    const { personalData } = profile;
+
+    if (personalData.firstName && personalData.lastName) {
       pendingSteps.splice(
         RegistrationStepMaps.get(RegistrationSteps.PersonalData)
       ),
         1;
     }
 
-    if (profile.location) {
+    if (personalData.address) {
       pendingSteps.splice(
-        RegistrationStepMaps.get(RegistrationSteps.LocationData)
+        RegistrationStepMaps.get(RegistrationSteps.AddressData)
       ),
         1;
     }
@@ -66,8 +68,8 @@ export class RegistrationComponent implements OnInit {
     return this.currentStep.name === RegistrationSteps.PersonalData;
   }
 
-  get isLocationDataStep() {
-    return this.currentStep.name === RegistrationSteps.LocationData;
+  get isAddressStep() {
+    return this.currentStep.name === RegistrationSteps.AddressData;
   }
 
   get isProfessionalDataStep() {
