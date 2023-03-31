@@ -8,8 +8,6 @@ import {
 import { AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
-import { HttpStatus } from '../core/models';
-import { ResponsiveService } from '../core/services';
 import { UserService } from '../modules/user/services/user.service';
 import { PageName } from '../shared/enums/page-name.enum';
 import { TimerUtils } from '../shared/helpers';
@@ -18,6 +16,8 @@ import { ToastService } from '../shared/toast/services';
 import { AuthenticatedUser } from './models/authenticated-user';
 import { AuthenticationService } from './services/authentication.service';
 import { TAuth } from './types/auth.type';
+import { HttpStatus } from '../core/http/models/http-status';
+import { ResponsiveService } from '../core/global/services';
 
 @Component({
   selector: 'app-authentication',
